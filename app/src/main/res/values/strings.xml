@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ubike English</string>
+    <string name="map">Map</string>
+    <string name="list">List</string>
 </resources>
