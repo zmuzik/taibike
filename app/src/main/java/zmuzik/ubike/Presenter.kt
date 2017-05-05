@@ -1,29 +1,37 @@
 package zmuzik.ubike
 
 import android.util.Log
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import okhttp3.OkHttpClient
+import java.io.IOException
 import javax.inject.Inject
 
 class Presenter {
 
+    val API_URL = "http://data.taipei/youbike"
+
     @Inject
-    lateinit var mApi : Api
+    lateinit var mOkHttpClient: OkHttpClient
 
     init {
         App.graph.inject(this)
     }
 
     fun onResume() {
-        mApi.getUbikeData().enqueue(object : Callback<JSONObject> {
-            override fun onResponse(call: Call<JSONObject>?, response: Response<JSONObject>?) {
-                Log.d("RESP:", response?.toString())
+        requestStationsData(API_URL)
+    }
+
+    private fun requestStationsData(url: String) {
+        val request = okhttp3.Request.Builder().url(url).build()
+        mOkHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
+
+            @Throws(IOException::class)
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val result = response.body().string()
+                Log.d("RESP:", result)
             }
 
-            override fun onFailure(call: Call<JSONObject>?, t: Throwable?) {
-                print(t)
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                e.printStackTrace()
             }
         })
     }
