@@ -5,19 +5,28 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
+    @Inject
+    lateinit var mPresenter: Presenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.graph.inject(this)
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(this)
         viewPager.adapter = PagesAdapter(supportFragmentManager)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.onResume()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
