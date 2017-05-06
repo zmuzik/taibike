@@ -1,6 +1,9 @@
-package zmuzik.ubike
+package zmuzik.ubike.di
 
 import dagger.Component
+import zmuzik.ubike.App
+import zmuzik.ubike.MainActivity
+import zmuzik.ubike.Presenter
 import javax.inject.Singleton
 
 @Singleton

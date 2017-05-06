@@ -2,6 +2,8 @@ package zmuzik.ubike
 
 import android.app.Application
 import android.location.LocationManager
+import zmuzik.ubike.di.AppComponent
+import zmuzik.ubike.di.AppModule
 import javax.inject.Inject
 
 class App : Application() {

@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.ubike.di
 
 import android.app.Application
 import android.content.Context
@@ -6,6 +6,7 @@ import android.location.LocationManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import zmuzik.ubike.Presenter
 import javax.inject.Singleton
 
 @Module
