@@ -1,5 +1,7 @@
 package zmuzik.ubike
 
+import android.location.Location
+import android.location.LocationManager
 import android.util.Log
 import okhttp3.OkHttpClient
 import java.io.IOException
@@ -12,12 +14,20 @@ class Presenter {
     @Inject
     lateinit var mOkHttpClient: OkHttpClient
 
+    @Inject
+    lateinit var mLocationManager : LocationManager
+
     init {
         App.graph.inject(this)
     }
 
     fun onResume() {
         requestStationsData(API_URL)
+        requestLocation()
+    }
+
+    private fun requestLocation() {
+        val loc : Location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
     }
 
     private fun requestStationsData(url: String) {
