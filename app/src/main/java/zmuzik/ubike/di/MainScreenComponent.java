@@ -14,6 +14,6 @@ public interface MainScreenComponent {
 
     void inject(MainActivity mainActivity);
 
-    //void inject(MainScreenPresenter presenter);
+    void inject(MainScreenPresenter presenter);
 
 }

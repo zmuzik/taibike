@@ -3,7 +3,6 @@ package zmuzik.ubike;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
@@ -11,6 +10,7 @@ import javax.inject.Inject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import zmuzik.ubike.di.ActivityContext;
 import zmuzik.ubike.di.ActivityScope;
 
 @ActivityScope
@@ -20,11 +20,15 @@ public class MainScreenPresenter {
     private final static int REQUEST_PERMISSION_LOC = 101;
 
     @Inject
-    OkHttpClient mOkHttpClient;
-//    @Inject
-//    LocationManager mLocationManager;
-    @Inject
+    @ActivityContext
     Context mContext;
+
+    @Inject
+    OkHttpClient mOkHttpClient;
+
+    @Inject
+    LocationManager mLocationManager;
+
 
     @Inject
     public MainScreenPresenter() {

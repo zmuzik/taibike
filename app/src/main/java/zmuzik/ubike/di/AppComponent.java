@@ -3,6 +3,7 @@ package zmuzik.ubike.di;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 
 import javax.inject.Singleton;
 
@@ -29,5 +30,7 @@ public interface AppComponent {
     PreferencesHelper getPrefsHelper();
 
     OkHttpClient getOkHttpClient();
+
+    LocationManager getLocationManager();
 
 }

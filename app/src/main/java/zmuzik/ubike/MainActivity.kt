@@ -37,12 +37,12 @@ class MainActivity : AppCompatActivity(),
                 .mainScreenModule(MainScreenModule(this))
                 .build()
         mComponent.inject(this)
-        //mComponent.inject(mPresenter)
+        mComponent.inject(mPresenter)
     }
 
     override fun onResume() {
         super.onResume()
-        //mPresenter.onResume()
+        mPresenter.onResume()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
