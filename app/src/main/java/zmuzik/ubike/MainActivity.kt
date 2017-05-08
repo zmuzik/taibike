@@ -8,9 +8,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MenuItem
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
 import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.di.DaggerMainScreenComponent
@@ -18,19 +21,32 @@ import zmuzik.ubike.di.MainScreenComponent
 import zmuzik.ubike.di.MainScreenModule
 import javax.inject.Inject
 
+
 @ActivityScope
 class MainActivity : AppCompatActivity(),
-        BottomNavigationView.OnNavigationItemSelectedListener, MainScreenView {
+        BottomNavigationView.OnNavigationItemSelectedListener, MainScreenView, OnMapReadyCallback {
 
     @Inject
     lateinit var mPresenter: MainScreenPresenter
 
     lateinit var mComponent: MainScreenComponent
 
+    val mapFragment: SupportMapFragment = SupportMapFragment.newInstance()
+    val listFragment: Fragment = StationsListFragment()
+
+    val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
+    val PREF_MIN_ZOOM_LEVEL: Float = 10f
+    val PREF_MAX_ZOOM_LEVEL: Float = 20f
+
+    var mMap: GoogleMap? = null
+    var mLastLoc: Location? = null
+    var mIsZoomedInAlready: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject()
         setContentView(R.layout.activity_main)
+        mapFragment.getMapAsync(this)
         navigation.setOnNavigationItemSelectedListener(this)
         viewPager.adapter = PagesAdapter(supportFragmentManager)
     }
@@ -72,17 +88,38 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onLocationChanged(loc: Location) {
-        Log.d("LOCATION", "lat: " + loc.latitude + " lon: " + loc.longitude)
+        mLastLoc = loc
+        maybeUpdateLocation()
     }
 
-    private class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    override fun onMapReady(map: GoogleMap?) {
+        mMap = map
+        mMap?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
+        mMap?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
+        mMap?.isMyLocationEnabled = true
+        mMap?.myLocation
+        maybeUpdateLocation()
+    }
+
+    private fun maybeUpdateLocation() {
+        if (mMap != null && mLastLoc != null) {
+            val ll: LatLng = LatLng(mLastLoc!!.latitude, mLastLoc!!.longitude)
+            mMap!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
+            if (!mIsZoomedInAlready) {
+                mMap!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
+                mIsZoomedInAlready = true
+            }
+        }
+    }
+
+    inner class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getCount(): Int = 2
 
         override fun getItem(position: Int): Fragment? {
             when (position) {
-                0 -> return SupportMapFragment.newInstance()
-                1 -> return StationsListFragment()
+                0 -> return mapFragment
+                1 -> return listFragment
             }
             return null
         }
