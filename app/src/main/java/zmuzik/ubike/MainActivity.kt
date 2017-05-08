@@ -1,5 +1,6 @@
 package zmuzik.ubike
 
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +20,7 @@ import javax.inject.Inject
 
 @ActivityScope
 class MainActivity : AppCompatActivity(),
-        BottomNavigationView.OnNavigationItemSelectedListener {
+        BottomNavigationView.OnNavigationItemSelectedListener, MainScreenView {
 
     @Inject
     lateinit var mPresenter: MainScreenPresenter
@@ -47,6 +49,11 @@ class MainActivity : AppCompatActivity(),
         mPresenter.onResume()
     }
 
+    override fun onPause() {
+        super.onStop()
+        mPresenter.onPause()
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_map -> viewPager.currentItem = 0
@@ -55,8 +62,17 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
-    fun onLocationChanged(loc: Location) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        if (requestCode == mPresenter.REQUEST_PERMISSION_LOC) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mPresenter.requestLocation()
+            }
+        }
+    }
 
+    override fun onLocationChanged(loc: Location) {
+        Log.d("LOCATION", "lat: " + loc.latitude + " lon: " + loc.longitude)
     }
 
     private class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
