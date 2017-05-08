@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.di.DaggerMainScreenComponent
 import zmuzik.ubike.di.MainScreenComponent
 import zmuzik.ubike.di.MainScreenModule
 import javax.inject.Inject
 
+@ActivityScope
 class MainActivity : AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener {
 

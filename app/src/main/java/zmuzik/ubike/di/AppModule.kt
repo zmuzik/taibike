@@ -15,12 +15,6 @@ import zmuzik.ubike.App
 class AppModule(internal var mApplication: Application) {
 
     @Provides
-    @AppContext
-    internal fun provideApplicationContext(): Context {
-        return mApplication.applicationContext
-    }
-
-    @Provides
     internal fun provideApplication(): Application {
         return mApplication
     }

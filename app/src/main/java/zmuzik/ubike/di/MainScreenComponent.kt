@@ -1,5 +1,6 @@
 package zmuzik.ubike.di
 
+import android.content.Context
 import dagger.Component
 import zmuzik.ubike.MainActivity
 import zmuzik.ubike.MainScreenPresenter
@@ -12,5 +13,7 @@ interface MainScreenComponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(presenter: MainScreenPresenter)
+
+    val activityContext: Context
 
 }

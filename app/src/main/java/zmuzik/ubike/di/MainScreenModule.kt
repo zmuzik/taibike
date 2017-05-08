@@ -12,7 +12,6 @@ import zmuzik.ubike.MainScreenView
 class MainScreenModule(private val mActivity: Activity) {
 
     @Provides
-    @ActivityContext
     internal fun provideContext(): Context {
         return mActivity
     }

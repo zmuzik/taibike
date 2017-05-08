@@ -18,9 +18,6 @@ interface AppComponent {
 
     fun inject(helper: PreferencesHelper)
 
-    @get:AppContext
-    val applicationContext: Context
-
     val application: Application
 
     val app: App
