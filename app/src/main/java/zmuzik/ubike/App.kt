@@ -1,23 +1,24 @@
 package zmuzik.ubike
 
 import android.app.Application
-import android.location.LocationManager
 import zmuzik.ubike.di.AppComponent
 import zmuzik.ubike.di.AppModule
-import javax.inject.Inject
+import zmuzik.ubike.di.DaggerAppComponent
 
 class App : Application() {
 
     companion object {
-        @JvmStatic lateinit var graph: AppComponent
+        lateinit var mAppComponent: AppComponent
     }
-
-    @Inject
-    lateinit var locationManager: LocationManager
 
     override fun onCreate() {
         super.onCreate()
-        graph = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        graph.inject(this)
+        mAppComponent = DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
+    }
+
+    fun getComponent(): AppComponent {
+        return mAppComponent
     }
 }

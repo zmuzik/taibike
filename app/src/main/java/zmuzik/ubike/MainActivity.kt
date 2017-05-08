@@ -1,32 +1,48 @@
 package zmuzik.ubike
 
+import android.location.Location
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import zmuzik.ubike.di.DaggerMainScreenComponent
+import zmuzik.ubike.di.MainScreenComponent
+import zmuzik.ubike.di.MainScreenModule
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(),
+        BottomNavigationView.OnNavigationItemSelectedListener {
 
     @Inject
-    lateinit var mPresenter: Presenter
+    lateinit var mPresenter: MainScreenPresenter
+
+    lateinit var mComponent: MainScreenComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.graph.inject(this)
+        inject()
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(this)
         viewPager.adapter = PagesAdapter(supportFragmentManager)
     }
 
+    private fun inject() {
+        mComponent = DaggerMainScreenComponent.builder()
+                .appComponent(App.mAppComponent)
+                .mainScreenModule(MainScreenModule(this))
+                .build()
+        mComponent.inject(this)
+        //mComponent.inject(mPresenter)
+    }
+
     override fun onResume() {
         super.onResume()
-        mPresenter.onResume()
+        //mPresenter.onResume()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -37,7 +53,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return true
     }
 
-    private class PagesAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    fun onLocationChanged(loc: Location) {
+
+    }
+
+    private class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getCount(): Int = 2
 
