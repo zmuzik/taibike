@@ -8,17 +8,13 @@ import zmuzik.ubike.di.DaggerAppComponent
 class App : Application() {
 
     companion object {
-        lateinit var mAppComponent: AppComponent
+        lateinit var appComponent: AppComponent
     }
 
     override fun onCreate() {
         super.onCreate()
-        mAppComponent = DaggerAppComponent.builder()
+        appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .build()
-    }
-
-    fun getComponent(): AppComponent {
-        return mAppComponent
     }
 }
