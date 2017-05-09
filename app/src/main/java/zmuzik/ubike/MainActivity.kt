@@ -20,6 +20,7 @@ import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.di.DaggerMainScreenComponent
 import zmuzik.ubike.di.MainScreenComponent
 import zmuzik.ubike.di.MainScreenModule
+import zmuzik.ubike.model.Station
 import javax.inject.Inject
 
 
@@ -125,6 +126,10 @@ class MainActivity : AppCompatActivity(),
                 mIsZoomedInPosition = true
             }
         }
+    }
+
+    override fun updateStations(mStationsList: List<Station>?) {
+
     }
 
     inner class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

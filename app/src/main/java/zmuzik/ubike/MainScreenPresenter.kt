@@ -9,10 +9,13 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.util.Log
+import android.util.JsonReader
 import okhttp3.OkHttpClient
 import zmuzik.ubike.di.ActivityScope
+import zmuzik.ubike.model.Station
 import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 import javax.inject.Inject
 
 
@@ -35,6 +38,7 @@ constructor() : LocationListener {
     @Inject
     lateinit var mView: MainScreenView
 
+    var mStationsList: ArrayList<Station>? = ArrayList()
 
     fun onResume() {
         requestLocation()
@@ -71,14 +75,60 @@ constructor() : LocationListener {
 
             @Throws(IOException::class)
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                val result = response.body().string()
-                Log.d("RESP:", result)
+                processStationsData(response.body().byteStream())
             }
 
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 e.printStackTrace()
             }
         })
+    }
+
+    fun processStationsData(stream: InputStream) {
+        mStationsList = ArrayList()
+        val reader: JsonReader = JsonReader(InputStreamReader(stream, "UTF-8"))
+        try {
+            reader.beginObject()
+            reader.nextName()
+            reader.skipValue()
+            reader.nextName()
+            reader.beginObject()
+            while (reader.hasNext()) {
+                // skip the "key/id"
+                reader.nextName()
+                // BEGIN station
+                reader.beginObject()
+                val station: Station = Station()
+                while (reader.hasNext()) {
+                    val name = reader.nextName()
+                    val value = reader.nextString()
+                    when (name) {
+                        "sno" -> station.stationNumber = value
+                        "sna" -> station.stationName = value
+                        "tot" -> station.totalBikes = value
+                        "sbi" -> station.presentBikes = value
+                        "sarea" -> station.area = value
+                        "mday" -> station.date = value
+                        "lat" -> station.lat = value
+                        "lng" -> station.lng = value
+                        "ar" -> station.description = value
+                        "sareaen" -> station.areaEng = value
+                        "snaen" -> station.stationNameEng = value
+                        "aren" -> station.descriptionEng = value
+                        "bemp" -> station.bemp = value
+                        "act" -> station.act = value
+                    }
+                }
+                mStationsList?.add(station)
+                reader.endObject()
+                // END station
+            }
+            reader.endObject()
+            reader.endObject()
+        } finally {
+            reader.close()
+        }
+        mView.updateStations(mStationsList)
     }
 
     override fun onLocationChanged(location: Location?) {
