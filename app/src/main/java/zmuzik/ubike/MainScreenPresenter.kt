@@ -103,20 +103,22 @@ constructor() : LocationListener {
                     val name = reader.nextName()
                     val value = reader.nextString()
                     when (name) {
-                        "sno" -> station.stationNumber = value
-                        "sna" -> station.stationName = value
-                        "tot" -> station.totalBikes = value
-                        "sbi" -> station.presentBikes = value
-                        "sarea" -> station.area = value
-                        "mday" -> station.date = value
-                        "lat" -> station.lat = value
-                        "lng" -> station.lng = value
-                        "ar" -> station.description = value
-                        "sareaen" -> station.areaEng = value
-                        "snaen" -> station.stationNameEng = value
-                        "aren" -> station.descriptionEng = value
-                        "bemp" -> station.bemp = value
-                        "act" -> station.act = value
+                        "sno" -> station.id = value.toInt()
+                        "sna" -> station.nameCn = value
+                        "tot" -> station.totalBikes = value.toInt()
+                        "sbi" -> station.presentBikes = value.toInt()
+                        "sarea" -> station.areaCn = value
+                        "mday" -> station.date = value.substring(8, 10) +
+                                ":" + value.substring(10, 12) +
+                                ":" + value.substring(12, 14)
+                        "lat" -> station.lat = value.toDouble()
+                        "lng" -> station.lng = value.toDouble()
+                        "ar" -> station.descriptionCn = value
+                        "sareaen" -> station.areaEn = value
+                        "snaen" -> station.nameEn = value
+                        "aren" -> station.descriptionEn = value
+                        "bemp" -> station.bemp = value.toInt()
+                        "act" -> station.act = value.toInt()
                     }
                 }
                 mStationsList?.add(station)

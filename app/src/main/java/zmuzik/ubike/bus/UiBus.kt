@@ -19,7 +19,7 @@ class UiBus : Bus() {
         try {
             super.register(consumerObj)
         } catch (t: Throwable) {
-            //prevent exception when called by multiply run lifecycle method
+            //prevent exception when called by repeatedly run lifecycle method
         }
     }
 
@@ -27,7 +27,7 @@ class UiBus : Bus() {
         try {
             super.unregister(consumerObj)
         } catch (t: Throwable) {
-            //prevent exception when called by multiply run lifecycle method
+            //prevent exception when called by repeatedly run lifecycle method
         }
     }
 

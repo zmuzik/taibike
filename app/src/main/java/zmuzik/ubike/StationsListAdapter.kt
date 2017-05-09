@@ -17,8 +17,8 @@ class StationsListAdapter(private val values: List<Station>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mIdView.text = values[position].stationNumber
-        holder.mContentView.text = values[position].stationNameEng
+        holder.mIdView.text = values[position].id.toString()
+        holder.mContentView.text = values[position].nameEn
         holder.itemRoot.setOnClickListener { }
     }
 

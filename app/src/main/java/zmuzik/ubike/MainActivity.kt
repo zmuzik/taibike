@@ -24,6 +24,7 @@ import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.di.DaggerMainScreenComponent
 import zmuzik.ubike.di.MainScreenComponent
 import zmuzik.ubike.di.MainScreenModule
+import zmuzik.ubike.model.Station
 import javax.inject.Inject
 
 
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity(),
     val PREF_MIN_ZOOM_LEVEL: Float = 10f
     val PREF_MAX_ZOOM_LEVEL: Float = 20f
 
+    var mStationList: List<Station>? = null
     var mMap: GoogleMap? = null
     var mLastLoc: Location? = null
     var mIsZoomedInPosition: Boolean = false
@@ -82,7 +84,7 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         mPresenter.onResume()
-        UiBus.get().unregister(this)
+        UiBus.get().register(this)
     }
 
     override fun onPause() {
@@ -120,6 +122,7 @@ class MainActivity : AppCompatActivity(),
         mMap?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
         if (mPresenter.isLocPermission()) mMap?.isMyLocationEnabled = true
         maybeUpdateLocation()
+        maybeRedrawMarkers()
     }
 
     private fun maybeUpdateLocation() {
@@ -134,11 +137,18 @@ class MainActivity : AppCompatActivity(),
     }
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
-        if (event.list != null) {
-            //TODO update markers here
-        }
+        mStationList = event.list
+        maybeRedrawMarkers()
     }
 
+    fun maybeRedrawMarkers() {
+        if (mStationList != null && mMap != null) {
+            mMap!!.clear()
+            for (station: Station in mStationList!!) {
+                mMap!!.addMarker(station.getMarkerOptions())
+            }
+        }
+    }
 
     inner class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
