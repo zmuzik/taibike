@@ -47,14 +47,14 @@ constructor() : LocationListener {
 
     fun isLocPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(mActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     fun requestLocation() {
         if (isLocPermission()) {
-            requestLocationPermission()
-        } else {
             mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, this)
+        } else {
+            requestLocationPermission()
         }
     }
 

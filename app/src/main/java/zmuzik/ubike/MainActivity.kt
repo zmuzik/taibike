@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(),
 
     var mMap: GoogleMap? = null
     var mLastLoc: Location? = null
-    var mIsZoomedInAlready: Boolean = false
+    var mIsZoomedInPosition: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity(),
         if (requestCode == mPresenter.REQUEST_PERMISSION_LOC) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mPresenter.requestLocation()
+                mMap?.isMyLocationEnabled = true
             }
         }
     }
@@ -96,18 +97,17 @@ class MainActivity : AppCompatActivity(),
         mMap = map
         mMap?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
         mMap?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
-        mMap?.isMyLocationEnabled = true
-        mMap?.myLocation
+        if (mPresenter.isLocPermission()) mMap?.isMyLocationEnabled = true
         maybeUpdateLocation()
     }
 
     private fun maybeUpdateLocation() {
         if (mMap != null && mLastLoc != null) {
             val ll: LatLng = LatLng(mLastLoc!!.latitude, mLastLoc!!.longitude)
-            mMap!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
-            if (!mIsZoomedInAlready) {
+            if (!mIsZoomedInPosition) {
+                mMap!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
                 mMap!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
-                mIsZoomedInAlready = true
+                mIsZoomedInPosition = true
             }
         }
     }
