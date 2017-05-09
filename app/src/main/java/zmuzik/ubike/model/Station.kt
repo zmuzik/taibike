@@ -25,7 +25,7 @@ data class Station(
     fun getMarkerOptions(): MarkerOptions {
         return MarkerOptions()
                 .position(LatLng(lat, lng))
-                .anchor(0.5f, 0.5f)
+                .anchor(1.0f, 1.0f)
                 .title(nameEn)
                 .snippet(areaEn)
     }
