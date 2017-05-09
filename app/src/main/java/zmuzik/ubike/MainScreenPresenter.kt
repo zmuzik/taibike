@@ -41,6 +41,7 @@ constructor() : LocationListener {
     lateinit var mLocationManager: LocationManager
 
     var stations: HashMap<Int, Station> = HashMap()
+    var location: Location? = null
 
     fun onResume() {
         requestLocation()
@@ -88,8 +89,7 @@ constructor() : LocationListener {
                 for (station: Station in stationsList!!) {
                     stations.put(station.id, station)
                 }
-                val sortedStations: List<Station> = ArrayList(stations.values)
-                UiBus.get().post(StationsUpdatedEvent(sortedStations))
+                maybePublishStationsUpdate()
             }
 
             override fun onFailure(call: okhttp3.Call, e: IOException) {
@@ -98,11 +98,24 @@ constructor() : LocationListener {
         })
     }
 
-    override fun onLocationChanged(location: Location?) {
-        if (location != null) {
-            UiBus.get().post(LocationUpdatedEvent(location))
+    override fun onLocationChanged(loc: Location?) {
+        if (loc != null) {
+            location = loc
+            UiBus.get().post(LocationUpdatedEvent(loc))
             mLocationManager.removeUpdates(this)
+            maybePublishStationsUpdate()
         }
+    }
+
+    private fun maybePublishStationsUpdate() {
+        if (location == null || stations.isEmpty()) return
+
+        val sortedStations: List<Station> = if (location == null) {
+            ArrayList(stations.values)
+        } else {
+            ArrayList(stations.values).sortedBy { it.getDistanceFrom(location!!) }
+        }
+        UiBus.get().post(StationsUpdatedEvent(sortedStations))
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
