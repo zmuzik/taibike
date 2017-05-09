@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -49,6 +50,20 @@ class MainActivity : AppCompatActivity(),
         mapFragment.getMapAsync(this)
         navigation.setOnNavigationItemSelectedListener(this)
         viewPager.adapter = PagesAdapter(supportFragmentManager)
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    0 -> navigation.selectedItemId = R.id.navigation_map
+                    1 -> navigation.selectedItemId = R.id.navigation_list
+                }
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float,
+                                        positionOffsetPixels: Int) {
+            }
+        })
     }
 
     private fun inject() {
