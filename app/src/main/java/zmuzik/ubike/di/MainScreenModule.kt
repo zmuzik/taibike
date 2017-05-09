@@ -2,11 +2,9 @@ package zmuzik.ubike.di
 
 import android.app.Activity
 import android.content.Context
-
 import dagger.Module
 import dagger.Provides
 import zmuzik.ubike.MainScreenPresenter
-import zmuzik.ubike.MainScreenView
 
 @Module
 class MainScreenModule(private val mActivity: Activity) {
@@ -25,11 +23,5 @@ class MainScreenModule(private val mActivity: Activity) {
     @ActivityScope
     internal fun providePresenter(): MainScreenPresenter {
         return MainScreenPresenter()
-    }
-
-    @Provides
-    @ActivityScope
-    internal fun provideView(): MainScreenView {
-        return mActivity as MainScreenView
     }
 }
