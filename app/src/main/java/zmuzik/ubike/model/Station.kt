@@ -27,7 +27,7 @@ data class Station(
                 .position(LatLng(lat, lng))
                 .anchor(1.0f, 1.0f)
                 .title(nameEn)
-                .snippet(areaEn)
+                .snippet(descriptionEn)
     }
 
     fun getDistanceFrom(loc: Location): Double = distance(lat, lng, loc.latitude, loc.longitude)
