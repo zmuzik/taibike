@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun inject() {
         mComponent = DaggerMainScreenComponent.builder()
-                .appComponent(App.appComponent)
+                .appComponent((applicationContext as App).appComponent)
                 .mainScreenModule(MainScreenModule(this))
                 .build()
         mComponent.inject(this)
