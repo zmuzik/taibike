@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
+import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.di.DaggerMainScreenComponent
 import zmuzik.ubike.di.MainScreenComponent
@@ -79,11 +80,13 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         mPresenter.onResume()
+        UiBus.get().unregister(this)
     }
 
     override fun onPause() {
         super.onStop()
         mPresenter.onPause()
+        UiBus.get().unregister(this)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

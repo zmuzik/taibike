@@ -1,6 +1,5 @@
 package zmuzik.ubike
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,7 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import com.squareup.otto.Subscribe
+import zmuzik.ubike.bus.StationsUpdatedEvent
+import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.dummy.DummyContent
 
 class StationsListFragment : Fragment() {
@@ -30,12 +31,17 @@ class StationsListFragment : Fragment() {
         return view
     }
 
+    @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    override fun onResume() {
+        super.onResume()
+        UiBus.get().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        UiBus.get().unregister(this)
     }
 }
