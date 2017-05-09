@@ -9,16 +9,16 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.util.JsonReader
 import okhttp3.OkHttpClient
 import zmuzik.ubike.bus.LocationUpdatedEvent
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.model.Station
+import zmuzik.ubike.utils.processApiResponseNewTaipei
+import zmuzik.ubike.utils.processApiResponseTaipei
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
 import javax.inject.Inject
 
 
@@ -26,7 +26,9 @@ import javax.inject.Inject
 class MainScreenPresenter @Inject
 constructor() : LocationListener {
 
-    val API_URL = "http://data.taipei/youbike"
+    val API_URL_TAIPEI = "http://data.taipei/youbike"
+    val API_URL_NEW_TAIPEI = "http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000352-001"
+
     val REQUEST_PERMISSION_LOC = 101
 
     @Inject
@@ -38,11 +40,12 @@ constructor() : LocationListener {
     @Inject
     lateinit var mLocationManager: LocationManager
 
-    var mStationsList: ArrayList<Station>? = ArrayList()
+    var stations: HashMap<Int, Station> = HashMap()
 
     fun onResume() {
         requestLocation()
-        requestStationsData(API_URL)
+        requestStationsData(API_URL_TAIPEI)
+        requestStationsData(API_URL_NEW_TAIPEI)
     }
 
     fun onPause() {
@@ -75,7 +78,18 @@ constructor() : LocationListener {
 
             @Throws(IOException::class)
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                processStationsData(response.body().byteStream())
+                val stream: InputStream = response.body().byteStream()
+                var stationsList: ArrayList<Station>? = null
+                if (url == API_URL_TAIPEI) {
+                    stationsList = processApiResponseTaipei(stream)
+                } else if (url == API_URL_NEW_TAIPEI) {
+                    stationsList = processApiResponseNewTaipei(stream)
+                }
+                for (station: Station in stationsList!!) {
+                    stations.put(station.id, station)
+                }
+                val sortedStations: List<Station> = ArrayList(stations.values)
+                UiBus.get().post(StationsUpdatedEvent(sortedStations))
             }
 
             override fun onFailure(call: okhttp3.Call, e: IOException) {
@@ -84,59 +98,10 @@ constructor() : LocationListener {
         })
     }
 
-    fun processStationsData(stream: InputStream) {
-        mStationsList = ArrayList()
-        val reader: JsonReader = JsonReader(InputStreamReader(stream, "UTF-8"))
-        try {
-            reader.beginObject()
-            reader.nextName()
-            reader.skipValue()
-            reader.nextName()
-            reader.beginObject()
-            while (reader.hasNext()) {
-                // skip the "key/id"
-                reader.nextName()
-                // BEGIN station
-                reader.beginObject()
-                val station: Station = Station()
-                while (reader.hasNext()) {
-                    val name = reader.nextName()
-                    val value = reader.nextString()
-                    when (name) {
-                        "sno" -> station.id = value.toInt()
-                        "sna" -> station.nameCn = value
-                        "tot" -> station.totalBikes = value.toInt()
-                        "sbi" -> station.presentBikes = value.toInt()
-                        "sarea" -> station.areaCn = value
-                        "mday" -> station.date = value.substring(8, 10) +
-                                ":" + value.substring(10, 12) +
-                                ":" + value.substring(12, 14)
-                        "lat" -> station.lat = value.toDouble()
-                        "lng" -> station.lng = value.toDouble()
-                        "ar" -> station.descriptionCn = value
-                        "sareaen" -> station.areaEn = value
-                        "snaen" -> station.nameEn = value
-                        "aren" -> station.descriptionEn = value
-                        "bemp" -> station.bemp = value.toInt()
-                        "act" -> station.act = value.toInt()
-                    }
-                }
-                mStationsList?.add(station)
-                reader.endObject()
-                // END station
-            }
-            reader.endObject()
-            reader.endObject()
-        } finally {
-            reader.close()
-        }
-
-        UiBus.get().post(StationsUpdatedEvent(mStationsList))
-    }
-
     override fun onLocationChanged(location: Location?) {
         if (location != null) {
             UiBus.get().post(LocationUpdatedEvent(location))
+            mLocationManager.removeUpdates(this)
         }
     }
 

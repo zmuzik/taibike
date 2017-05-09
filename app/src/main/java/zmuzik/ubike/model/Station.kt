@@ -1,9 +1,7 @@
 package zmuzik.ubike.model
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import zmuzik.ubike.R
 
 data class Station(
         var id: Int,

@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.ubike.utils
 
 
 fun degToRad(deg: Double): Double {

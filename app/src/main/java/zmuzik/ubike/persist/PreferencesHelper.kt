@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.ubike.persist
 
 import android.content.SharedPreferences
 
