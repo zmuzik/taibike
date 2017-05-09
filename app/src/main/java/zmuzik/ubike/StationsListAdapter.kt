@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import zmuzik.ubike.model.Station
 
-import zmuzik.ubike.dummy.DummyContent.DummyItem
-
-class StationsListAdapter(private val mValues: List<DummyItem>) : RecyclerView.Adapter<StationsListAdapter.ViewHolder>() {
+class StationsListAdapter(private val values: List<Station>) :
+        RecyclerView.Adapter<StationsListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -17,28 +17,15 @@ class StationsListAdapter(private val mValues: List<DummyItem>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mItem = mValues[position]
-        holder.mIdView.text = mValues[position].id
-        holder.mContentView.text = mValues[position].content
-        holder.mView.setOnClickListener { }
+        holder.mIdView.text = values[position].stationNumber
+        holder.mContentView.text = values[position].stationName
+        holder.itemRoot.setOnClickListener { }
     }
 
-    override fun getItemCount(): Int {
-        return mValues.size
-    }
+    override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView
-        val mContentView: TextView
-        var mItem: DummyItem? = null
-
-        init {
-            mIdView = mView.findViewById(R.id.id) as TextView
-            mContentView = mView.findViewById(R.id.content) as TextView
-        }
-
-        override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
-        }
+    inner class ViewHolder(val itemRoot: View) : RecyclerView.ViewHolder(itemRoot) {
+        val mIdView: TextView = itemRoot.findViewById(R.id.id) as TextView
+        val mContentView: TextView = itemRoot.findViewById(R.id.content) as TextView
     }
 }

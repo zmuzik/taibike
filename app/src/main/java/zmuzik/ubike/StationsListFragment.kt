@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import com.squareup.otto.Subscribe
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
-import zmuzik.ubike.dummy.DummyContent
 
 class StationsListFragment : Fragment() {
+
+    lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,19 +21,16 @@ class StationsListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_station_list, container, false)
-
-        if (view is RecyclerView) {
-            val context = view.getContext()
-            val recyclerView = view
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = StationsListAdapter(DummyContent.ITEMS)
-        }
-        return view
+        val rootView = inflater!!.inflate(R.layout.fragment_station_list, container, false)
+        recyclerView = rootView as RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(view?.context)
+        return rootView
     }
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
-
+        if (event.list != null) {
+            recyclerView.adapter = StationsListAdapter(event.list)
+        }
     }
 
     override fun onResume() {

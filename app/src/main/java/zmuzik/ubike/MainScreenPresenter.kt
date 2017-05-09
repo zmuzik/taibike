@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.util.JsonReader
 import okhttp3.OkHttpClient
+import zmuzik.ubike.bus.StationsUpdatedEvent
+import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.model.Station
 import java.io.IOException
@@ -128,7 +130,9 @@ constructor() : LocationListener {
         } finally {
             reader.close()
         }
-        mView.updateStations(mStationsList)
+
+        //mView.updateStations(mStationsList)
+        UiBus.get().post(StationsUpdatedEvent(mStationsList))
     }
 
     override fun onLocationChanged(location: Location?) {
