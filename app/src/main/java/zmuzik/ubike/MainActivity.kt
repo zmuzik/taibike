@@ -15,19 +15,21 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.activity_main.*
+import zmuzik.ubike.bus.LocationUpdatedEvent
+import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
 import zmuzik.ubike.di.DaggerMainScreenComponent
 import zmuzik.ubike.di.MainScreenComponent
 import zmuzik.ubike.di.MainScreenModule
-import zmuzik.ubike.model.Station
 import javax.inject.Inject
 
 
 @ActivityScope
 class MainActivity : AppCompatActivity(),
-        BottomNavigationView.OnNavigationItemSelectedListener, MainScreenView, OnMapReadyCallback {
+        BottomNavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     @Inject
     lateinit var mPresenter: MainScreenPresenter
@@ -107,8 +109,8 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onLocationChanged(loc: Location) {
-        mLastLoc = loc
+    @Subscribe fun onLocationChanged(event: LocationUpdatedEvent) {
+        mLastLoc = event.location
         maybeUpdateLocation()
     }
 
@@ -131,9 +133,12 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun updateStations(mStationsList: List<Station>?) {
-
+    @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
+        if (event.list != null) {
+            //TODO update markers here
+        }
     }
+
 
     inner class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 

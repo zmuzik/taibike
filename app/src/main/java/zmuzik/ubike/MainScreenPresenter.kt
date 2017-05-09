@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.util.JsonReader
 import okhttp3.OkHttpClient
+import zmuzik.ubike.bus.LocationUpdatedEvent
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
@@ -36,9 +37,6 @@ constructor() : LocationListener {
 
     @Inject
     lateinit var mLocationManager: LocationManager
-
-    @Inject
-    lateinit var mView: MainScreenView
 
     var mStationsList: ArrayList<Station>? = ArrayList()
 
@@ -131,13 +129,12 @@ constructor() : LocationListener {
             reader.close()
         }
 
-        //mView.updateStations(mStationsList)
         UiBus.get().post(StationsUpdatedEvent(mStationsList))
     }
 
     override fun onLocationChanged(location: Location?) {
         if (location != null) {
-            mView.onLocationChanged(location)
+            UiBus.get().post(LocationUpdatedEvent(location))
         }
     }
 
