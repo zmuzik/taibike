@@ -4,11 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import okhttp3.OkHttpClient
 import zmuzik.ubike.bus.LocationUpdatedEvent
 import zmuzik.ubike.bus.StationsUpdatedEvent
@@ -23,7 +26,8 @@ import javax.inject.Inject
 
 
 @ActivityScope
-class MainScreenPresenter @Inject constructor() : LocationListener {
+class MainScreenPresenter @Inject constructor() : LocationListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     val API_URL_TAIPEI = "http://data.taipei/youbike"
     val API_URL_NEW_TAIPEI = "http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000352-001"
@@ -36,8 +40,7 @@ class MainScreenPresenter @Inject constructor() : LocationListener {
     @Inject
     lateinit var mOkHttpClient: OkHttpClient
 
-//    @Inject
-//    lateinit var mLocationManager: LocationManager
+    var mGoogleApiClient: GoogleApiClient? = null
 
     var stations: HashMap<Int, Station> = HashMap()
     var location: Location? = null
@@ -54,7 +57,9 @@ class MainScreenPresenter @Inject constructor() : LocationListener {
     fun onPause() {
         if (!isResumed) return
         isResumed = false
-        //mLocationManager.removeUpdates(this)
+        if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
+            mGoogleApiClient!!.disconnect()
+        }
     }
 
     fun isLocPermission(): Boolean {
@@ -64,7 +69,14 @@ class MainScreenPresenter @Inject constructor() : LocationListener {
 
     fun requestLocation() {
         if (isLocPermission()) {
-            //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, this)
+            if (mGoogleApiClient == null) {
+                mGoogleApiClient = GoogleApiClient.Builder(mActivity)
+                        .addApi(LocationServices.API)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .build()
+            }
+            mGoogleApiClient?.connect()
         } else {
             requestLocationPermission()
         }
@@ -102,15 +114,6 @@ class MainScreenPresenter @Inject constructor() : LocationListener {
         })
     }
 
-    override fun onLocationChanged(loc: Location?) {
-        if (loc != null) {
-            location = loc
-            UiBus.get().post(LocationUpdatedEvent(loc))
-            //mLocationManager.removeUpdates(this)
-            maybePublishStationsUpdate()
-        }
-    }
-
     private fun maybePublishStationsUpdate() {
         if (location == null || stations.isEmpty()) return
 
@@ -122,9 +125,26 @@ class MainScreenPresenter @Inject constructor() : LocationListener {
         UiBus.get().post(StationsUpdatedEvent(sortedStations))
     }
 
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    override fun onConnected(p0: Bundle?) {
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.numUpdates = 1
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                locationRequest, this)
+    }
 
-    override fun onProviderEnabled(provider: String?) {}
+    override fun onConnectionFailed(p0: ConnectionResult) {
+    }
 
-    override fun onProviderDisabled(provider: String?) {}
+    override fun onConnectionSuspended(p0: Int) {
+        mGoogleApiClient?.connect()
+    }
+
+    override fun onLocationChanged(loc: Location?) {
+        if (loc != null) {
+            location = loc
+            UiBus.get().post(LocationUpdatedEvent(loc))
+            maybePublishStationsUpdate()
+        }
+    }
 }
