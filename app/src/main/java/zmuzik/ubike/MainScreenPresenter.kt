@@ -23,8 +23,7 @@ import javax.inject.Inject
 
 
 @ActivityScope
-class MainScreenPresenter @Inject
-constructor() : LocationListener {
+class MainScreenPresenter @Inject constructor() : LocationListener {
 
     val API_URL_TAIPEI = "http://data.taipei/youbike"
     val API_URL_NEW_TAIPEI = "http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000352-001"
@@ -37,20 +36,25 @@ constructor() : LocationListener {
     @Inject
     lateinit var mOkHttpClient: OkHttpClient
 
-    @Inject
-    lateinit var mLocationManager: LocationManager
+//    @Inject
+//    lateinit var mLocationManager: LocationManager
 
     var stations: HashMap<Int, Station> = HashMap()
     var location: Location? = null
+    var isResumed: Boolean = false
 
     fun onResume() {
+        if (isResumed) return
+        isResumed = true
         requestLocation()
         requestStationsData(API_URL_TAIPEI)
         requestStationsData(API_URL_NEW_TAIPEI)
     }
 
     fun onPause() {
-        mLocationManager.removeUpdates(this)
+        if (!isResumed) return
+        isResumed = false
+        //mLocationManager.removeUpdates(this)
     }
 
     fun isLocPermission(): Boolean {
@@ -60,7 +64,7 @@ constructor() : LocationListener {
 
     fun requestLocation() {
         if (isLocPermission()) {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, this)
+            //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, this)
         } else {
             requestLocationPermission()
         }
@@ -102,7 +106,7 @@ constructor() : LocationListener {
         if (loc != null) {
             location = loc
             UiBus.get().post(LocationUpdatedEvent(loc))
-            mLocationManager.removeUpdates(this)
+            //mLocationManager.removeUpdates(this)
             maybePublishStationsUpdate()
         }
     }
