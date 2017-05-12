@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_item_margin">
-
-    <TextView
-        android:id="@+id/distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:textAppearance="?attr/textAppearanceListItemSmall" />
 
     <TextView
         android:id="@+id/parkingSpots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/distance"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="8dp"
-        android:drawableLeft="@drawable/ic_parking"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/blue" />
+        android:textColor="@color/blue"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/bikesPresent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/distance"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="4dp"
         android:layout_toLeftOf="@id/parkingSpots"
-        android:drawableLeft="@drawable/ic_bike"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/green" />
+        android:textColor="@color/green"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/bikePic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="3dp"
+        android:layout_toLeftOf="@id/bikesPresent"
+        app:srcCompat="@drawable/ic_bike" />
 
     <TextView
         android:id="@+id/stationName"
@@ -41,16 +41,28 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/distance"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_toLeftOf="@id/bikePic"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/parkingSpots"
+        android:textAppearance="?attr/textAppearanceListItemSmall"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/stationName"
-        android:layout_toLeftOf="@id/bikesPresent"
-        android:textAppearance="?attr/textAppearanceListItemSmall" />
-
+        android:layout_below="@+id/distance"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/gray"
+        android:textSize="14sp"
+        android:visibility="gone" />
 </RelativeLayout>

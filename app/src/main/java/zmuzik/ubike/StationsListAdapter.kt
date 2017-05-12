@@ -21,17 +21,19 @@ class StationsListAdapter(private val values: List<Station>, val location: Locat
         holder.stationName.text = values[position].nameEn
         holder.description.text = values[position].descriptionEn
         holder.bikesPresent.text = values[position].presentBikes.toString()
-        holder.parkingSpots.text = values[position].parkingSpots.toString()
+        holder.parkingSpots.text = "P " + values[position].parkingSpots.toString()
         holder.distance.text = getFormattedDistance(values[position].getDistanceFrom(location))
-
-        holder.itemRoot.setOnClickListener { }
+        holder.itemRoot.setOnClickListener {
+            holder.description.visibility =
+                    if (holder.description.visibility == View.GONE) View.VISIBLE else View.GONE
+        }
     }
 
     fun getFormattedDistance(dist: Double): String {
         if (dist < 1) {
             return "%.0f m".format(dist * 1000)
         } else if (dist < 10) {
-            return "%.1f km".format(dist)
+            return "%.2f km".format(dist)
         } else {
             return "%.0f km".format(dist)
         }
