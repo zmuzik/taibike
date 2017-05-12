@@ -24,8 +24,7 @@ class StationsListAdapter(private val values: List<Station>, val location: Locat
         holder.parkingSpots.text = "P " + values[position].parkingSpots.toString()
         holder.distance.text = getFormattedDistance(values[position].getDistanceFrom(location))
         holder.itemRoot.setOnClickListener {
-            holder.description.visibility =
-                    if (holder.description.visibility == View.GONE) View.VISIBLE else View.GONE
+            toggleVisibility(holder.description)
         }
     }
 
@@ -37,6 +36,10 @@ class StationsListAdapter(private val values: List<Station>, val location: Locat
         } else {
             return "%.0f km".format(dist)
         }
+    }
+
+    fun toggleVisibility(view: View) {
+        view.visibility = if (view.visibility == View.GONE) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount(): Int = values.size
