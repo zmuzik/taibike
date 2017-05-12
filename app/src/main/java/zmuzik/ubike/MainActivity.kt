@@ -120,6 +120,7 @@ class MainActivity : AppCompatActivity(),
         mMap = map
         mMap?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
         mMap?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
+        mMap?.uiSettings?.isZoomControlsEnabled = true
         if (mPresenter.isLocPermission()) mMap?.isMyLocationEnabled = true
         maybeUpdateLocation()
         maybeRedrawMarkers()
