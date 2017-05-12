@@ -122,7 +122,7 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
         } else {
             ArrayList(stations.values).sortedBy { it.getDistanceFrom(location!!) }
         }
-        UiBus.get().post(StationsUpdatedEvent(sortedStations))
+        UiBus.get().post(StationsUpdatedEvent(sortedStations, location))
     }
 
     override fun onConnected(p0: Bundle?) {

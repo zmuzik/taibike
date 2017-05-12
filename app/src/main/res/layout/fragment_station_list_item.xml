@@ -1,20 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_margin="@dimen/list_item_margin">
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:textAppearance="?attr/textAppearanceListItemSmall" />
+
+    <TextView
+        android:id="@+id/parkingSpots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/distance"
+        android:layout_marginLeft="8dp"
+        android:drawableLeft="@drawable/ic_parking"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/blue" />
+
+    <TextView
+        android:id="@+id/bikesPresent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/distance"
+        android:layout_marginLeft="16dp"
+        android:layout_toLeftOf="@id/parkingSpots"
+        android:drawableLeft="@drawable/ic_bike"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/green" />
+
+    <TextView
+        android:id="@+id/stationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/distance"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
+        android:id="@+id/description"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/stationName"
+        android:layout_toLeftOf="@id/bikesPresent"
+        android:textAppearance="?attr/textAppearanceListItemSmall" />
+
+</RelativeLayout>

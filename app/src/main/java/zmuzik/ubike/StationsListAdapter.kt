@@ -1,5 +1,6 @@
 package zmuzik.ubike
 
+import android.location.Location
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import zmuzik.ubike.model.Station
 
-class StationsListAdapter(private val values: List<Station>) :
+class StationsListAdapter(private val values: List<Station>, val location: Location) :
         RecyclerView.Adapter<StationsListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,15 +18,32 @@ class StationsListAdapter(private val values: List<Station>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mIdView.text = values[position].id.toString()
-        holder.mContentView.text = values[position].nameEn
+        holder.stationName.text = values[position].nameEn
+        holder.description.text = values[position].descriptionEn
+        holder.bikesPresent.text = values[position].presentBikes.toString()
+        holder.parkingSpots.text = values[position].parkingSpots.toString()
+        holder.distance.text = getFormattedDistance(values[position].getDistanceFrom(location))
+
         holder.itemRoot.setOnClickListener { }
+    }
+
+    fun getFormattedDistance(dist: Double): String {
+        if (dist < 1) {
+            return "%.0f m".format(dist * 1000)
+        } else if (dist < 10) {
+            return "%.1f km".format(dist)
+        } else {
+            return "%.0f km".format(dist)
+        }
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(val itemRoot: View) : RecyclerView.ViewHolder(itemRoot) {
-        val mIdView: TextView = itemRoot.findViewById(R.id.id) as TextView
-        val mContentView: TextView = itemRoot.findViewById(R.id.content) as TextView
+        val stationName: TextView = itemRoot.findViewById(R.id.stationName) as TextView
+        val description: TextView = itemRoot.findViewById(R.id.description) as TextView
+        val bikesPresent: TextView = itemRoot.findViewById(R.id.bikesPresent) as TextView
+        val parkingSpots: TextView = itemRoot.findViewById(R.id.parkingSpots) as TextView
+        val distance: TextView = itemRoot.findViewById(R.id.distance) as TextView
     }
 }

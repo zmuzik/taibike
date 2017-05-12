@@ -2,14 +2,17 @@ package zmuzik.ubike
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.squareup.otto.Subscribe
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
+
 
 class StationsListFragment : Fragment() {
 
@@ -24,12 +27,14 @@ class StationsListFragment : Fragment() {
         val rootView = inflater!!.inflate(R.layout.fragment_station_list, container, false)
         recyclerView = rootView as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(view?.context)
+        val dividerDecoration = DividerItemDecoration(recyclerView.context, LinearLayout.VERTICAL)
+        recyclerView.addItemDecoration(dividerDecoration)
         return rootView
     }
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
-        if (event.list != null) {
-            recyclerView.adapter = StationsListAdapter(event.list)
+        if (event.list != null && event.location != null) {
+            recyclerView.adapter = StationsListAdapter(event.list, event.location)
         }
     }
 
