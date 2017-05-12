@@ -67,7 +67,7 @@ fun getStation(reader: android.util.JsonReader): zmuzik.ubike.model.Station {
             "sareaen" -> station.areaEn = value
             "snaen" -> station.nameEn = value
             "aren" -> station.descriptionEn = value
-            "bemp" -> station.bemp = value.toInt()
+            "bemp" -> station.parkingSpots = value.toInt()
             "act" -> station.act = value.toInt()
         }
     }

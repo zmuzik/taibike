@@ -18,7 +18,7 @@ data class Station(
         var areaEn: String,
         var nameEn: String,
         var descriptionEn: String,
-        var bemp: Int,
+        var parkingSpots: Int,
         var act: Int) {
     constructor() : this(0, "", 0, 0, "", "", 0.0, 0.0, "", "", "", "", 0, 0)
 
@@ -27,7 +27,7 @@ data class Station(
                 .position(LatLng(lat, lng))
                 .anchor(1.0f, 1.0f)
                 .title(nameEn)
-                .snippet(descriptionEn)
+                .snippet("$descriptionEn bikes:$presentBikes parking:$parkingSpots")
     }
 
     fun getDistanceFrom(loc: Location): Double = distance(lat, lng, loc.latitude, loc.longitude)
