@@ -14,6 +14,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import okhttp3.OkHttpClient
 import zmuzik.ubike.bus.LocationUpdatedEvent
+import zmuzik.ubike.bus.ShowStationOnMapEvent
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
@@ -123,6 +124,10 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
             ArrayList(stations.values).sortedBy { it.getDistanceFrom(location!!) }
         }
         UiBus.get().post(StationsUpdatedEvent(sortedStations, location))
+    }
+
+    fun showStationOnMap(station: Station) {
+        UiBus.get().post(ShowStationOnMapEvent(station))
     }
 
     override fun onConnected(p0: Bundle?) {

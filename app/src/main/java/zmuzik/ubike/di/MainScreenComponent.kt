@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Component
 import zmuzik.ubike.MainActivity
 import zmuzik.ubike.MainScreenPresenter
+import zmuzik.ubike.StationsListFragment
 
 
 @ActivityScope
@@ -13,6 +14,8 @@ interface MainScreenComponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(presenter: MainScreenPresenter)
+
+    fun inject(fragment: StationsListFragment)
 
     val activityContext: Context
 

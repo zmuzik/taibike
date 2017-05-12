@@ -12,11 +12,15 @@ import android.widget.LinearLayout
 import com.squareup.otto.Subscribe
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
+import javax.inject.Inject
 
 
-class StationsListFragment : Fragment() {
+class StationsListFragment @Inject constructor() : Fragment() {
 
     lateinit var recyclerView: RecyclerView
+
+    @Inject
+    lateinit var presenter: MainScreenPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +38,7 @@ class StationsListFragment : Fragment() {
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
         if (event.list != null && event.location != null) {
-            recyclerView.adapter = StationsListAdapter(event.list, event.location)
+            recyclerView.adapter = StationsListAdapter(event.list, event.location, presenter)
         }
     }
 

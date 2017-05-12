@@ -31,4 +31,6 @@ data class Station(
     }
 
     fun getDistanceFrom(loc: Location): Double = distance(lat, lng, loc.latitude, loc.longitude)
+
+    fun getLatLng(): LatLng = LatLng(lat, lng)
 }

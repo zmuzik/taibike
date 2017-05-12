@@ -15,9 +15,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.activity_main.*
 import zmuzik.ubike.bus.LocationUpdatedEvent
+import zmuzik.ubike.bus.ShowStationOnMapEvent
 import zmuzik.ubike.bus.StationsUpdatedEvent
 import zmuzik.ubike.bus.UiBus
 import zmuzik.ubike.di.ActivityScope
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity(),
     lateinit var mComponent: MainScreenComponent
 
     val mapFragment: SupportMapFragment = SupportMapFragment.newInstance()
-    val listFragment: Fragment = StationsListFragment()
+    val listFragment: StationsListFragment = StationsListFragment()
 
     val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
     val PREF_MIN_ZOOM_LEVEL: Float = 10f
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity(),
     var mMap: GoogleMap? = null
     var mLastLoc: Location? = null
     var mIsZoomedInPosition: Boolean = false
+    lateinit var markers: ArrayList<Marker>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +82,7 @@ class MainActivity : AppCompatActivity(),
                 .build()
         mComponent.inject(this)
         mComponent.inject(mPresenter)
+        mComponent.inject(listFragment)
     }
 
     override fun onResume() {
@@ -142,11 +146,21 @@ class MainActivity : AppCompatActivity(),
         maybeRedrawMarkers()
     }
 
+    @Subscribe fun onShowStationOnMapRequested(event: ShowStationOnMapEvent) {
+        viewPager.setCurrentItem(0, true)
+        mMap?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
+        val marker = markers.find { it.tag == event.station.id } as Marker
+        marker.showInfoWindow()
+    }
+
     fun maybeRedrawMarkers() {
         if (mStationList != null && mMap != null) {
             mMap!!.clear()
+            markers = ArrayList<Marker>()
             for (station: Station in mStationList!!) {
-                mMap!!.addMarker(station.getMarkerOptions())
+                val marker = mMap!!.addMarker(station.getMarkerOptions())
+                marker.tag = station.id
+                markers.add(marker)
             }
         }
     }
