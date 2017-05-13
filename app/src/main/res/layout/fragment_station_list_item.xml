@@ -7,24 +7,22 @@
 
     <TextView
         android:id="@+id/parkingSpots"
+        style="@style/primaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="8dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/blue"
-        android:textSize="18sp" />
+        android:textColor="@color/blue" />
 
     <TextView
         android:id="@+id/bikesPresent"
+        style="@style/primaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_toLeftOf="@id/parkingSpots"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/green"
-        android:textSize="18sp" />
+        android:textColor="@color/green" />
 
     <ImageView
         android:id="@+id/bikePic"
@@ -37,23 +35,21 @@
 
     <TextView
         android:id="@+id/stationName"
+        style="@style/primaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/bikePic"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="18sp" />
+        android:layout_toLeftOf="@id/bikePic" />
 
 
     <TextView
         android:id="@+id/distance"
+        style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/parkingSpots"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textSize="18sp" />
+        android:layout_below="@id/parkingSpots" />
 
     <ImageView
         android:id="@+id/map"
@@ -61,29 +57,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/distance"
-        app:srcCompat="@drawable/ic_map_black_24dp" />
+        app:srcCompat="@drawable/ic_map_orange_24dp" />
 
     <TextView
         android:id="@+id/description"
+        style="@style/secondaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/distance"
         android:layout_toLeftOf="@id/map"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/timeUpdated"
+        style="@style/secondaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/description"
         android:layout_toLeftOf="@id/map"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
         android:visibility="gone" />
 </RelativeLayout>
