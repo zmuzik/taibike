@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(),
             mMap!!.clear()
             markers = ArrayList<Marker>()
             for (station: Station in mStationList!!) {
-                val marker = mMap!!.addMarker(station.getMarkerOptions())
+                val marker = mMap!!.addMarker(station.getMarkerOptions(this))
                 marker.tag = station.id
                 markers.add(marker)
             }
