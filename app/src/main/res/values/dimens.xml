@@ -5,4 +5,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="list_item_margin">8dp</dimen>
 
+    <dimen name="info_window_max_width">280dp</dimen>
 </resources>

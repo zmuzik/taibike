@@ -5,12 +5,14 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_item_margin"
     android:background="@drawable/info_window_bg"
+    android:maxWidth="@dimen/info_window_max_width"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/stationName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="@dimen/info_window_max_width"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="18sp" />
 
@@ -18,6 +20,7 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="@dimen/info_window_max_width"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/gray"
         android:textSize="14sp" />
