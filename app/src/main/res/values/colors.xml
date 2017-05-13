@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primary">#FF9800</color>
+    <color name="primary_dark">#F57C00</color>
+    <color name="primary_light">#FFE0B2</color>
+    <color name="accent">#FFEB3B</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#212121</color>
+    <color name="divider">#BDBDBD</color>
 
     <color name="blue">#FF0000DD</color>
     <color name="green">#FF009900</color>
@@ -13,6 +18,9 @@
     <color name="pinOrange">#FFEE9011</color>
     <color name="pinRed">#FFE81B0E</color>
     <color name="pinGray">#FF707070</color>
-    #
-    #707070
+
+    <!--bike colors-->
+    <color name="yellow">#FFFFB902</color>
+    <color name="orange">#FFFF743B</color>
+
 </resources>
