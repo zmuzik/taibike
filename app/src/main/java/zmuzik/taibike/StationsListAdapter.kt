@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.taibike
 
 import android.location.Location
 import android.support.v7.widget.RecyclerView
@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import zmuzik.ubike.model.Station
-import zmuzik.ubike.utils.getFormattedDistance
+import zmuzik.taibike.model.Station
+import zmuzik.taibike.utils.getFormattedDistance
 
 class StationsListAdapter(private val values: List<Station>, val location: Location,
                           val presenter: MainScreenPresenter) :

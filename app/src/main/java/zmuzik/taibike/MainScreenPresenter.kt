@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.taibike
 
 import android.Manifest
 import android.app.Activity
@@ -13,14 +13,14 @@ import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import okhttp3.OkHttpClient
-import zmuzik.ubike.bus.LocationUpdatedEvent
-import zmuzik.ubike.bus.ShowStationOnMapEvent
-import zmuzik.ubike.bus.StationsUpdatedEvent
-import zmuzik.ubike.bus.UiBus
-import zmuzik.ubike.di.ActivityScope
-import zmuzik.ubike.model.Station
-import zmuzik.ubike.utils.processApiResponseNewTaipei
-import zmuzik.ubike.utils.processApiResponseTaipei
+import zmuzik.taibike.bus.LocationUpdatedEvent
+import zmuzik.taibike.bus.ShowStationOnMapEvent
+import zmuzik.taibike.bus.StationsUpdatedEvent
+import zmuzik.taibike.bus.UiBus
+import zmuzik.taibike.di.ActivityScope
+import zmuzik.taibike.model.Station
+import zmuzik.taibike.utils.processApiResponseNewTaipei
+import zmuzik.taibike.utils.processApiResponseTaipei
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject

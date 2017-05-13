@@ -1,9 +1,9 @@
-package zmuzik.ubike
+package zmuzik.taibike
 
 import android.app.Application
-import zmuzik.ubike.di.AppComponent
-import zmuzik.ubike.di.AppModule
-import zmuzik.ubike.di.DaggerAppComponent
+import zmuzik.taibike.di.AppComponent
+import zmuzik.taibike.di.AppModule
+import zmuzik.taibike.di.DaggerAppComponent
 
 class App : Application() {
 

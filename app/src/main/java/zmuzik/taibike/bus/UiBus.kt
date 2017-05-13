@@ -1,4 +1,4 @@
-package zmuzik.ubike.bus
+package zmuzik.taibike.bus
 
 import android.os.Handler
 import android.os.Looper

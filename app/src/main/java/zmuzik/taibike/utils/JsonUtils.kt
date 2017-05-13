@@ -1,7 +1,7 @@
-package zmuzik.ubike.utils
+package zmuzik.taibike.utils
 
-fun processApiResponseTaipei(stream: java.io.InputStream): ArrayList<zmuzik.ubike.model.Station> {
-    val result: ArrayList<zmuzik.ubike.model.Station> = ArrayList()
+fun processApiResponseTaipei(stream: java.io.InputStream): ArrayList<zmuzik.taibike.model.Station> {
+    val result: ArrayList<zmuzik.taibike.model.Station> = ArrayList()
     val reader: android.util.JsonReader = android.util.JsonReader(java.io.InputStreamReader(stream, "UTF-8"))
     try {
         reader.beginObject()
@@ -13,7 +13,7 @@ fun processApiResponseTaipei(stream: java.io.InputStream): ArrayList<zmuzik.ubik
             // skip the "key/id"
             reader.nextName()
             // process the station json
-            result.add(zmuzik.ubike.utils.getStation(reader))
+            result.add(zmuzik.taibike.utils.getStation(reader))
         }
         reader.endObject()
         reader.endObject()
@@ -23,8 +23,8 @@ fun processApiResponseTaipei(stream: java.io.InputStream): ArrayList<zmuzik.ubik
     return result
 }
 
-fun processApiResponseNewTaipei(stream: java.io.InputStream): ArrayList<zmuzik.ubike.model.Station> {
-    val result: ArrayList<zmuzik.ubike.model.Station> = ArrayList()
+fun processApiResponseNewTaipei(stream: java.io.InputStream): ArrayList<zmuzik.taibike.model.Station> {
+    val result: ArrayList<zmuzik.taibike.model.Station> = ArrayList()
     val reader: android.util.JsonReader = android.util.JsonReader(java.io.InputStreamReader(stream, "UTF-8"))
     try {
         reader.beginObject()
@@ -35,7 +35,7 @@ fun processApiResponseNewTaipei(stream: java.io.InputStream): ArrayList<zmuzik.u
         while (reader.nextName() != "records") reader.skipValue()
         reader.beginArray()
         while (reader.hasNext()) {
-            result.add(zmuzik.ubike.utils.getStation(reader))
+            result.add(zmuzik.taibike.utils.getStation(reader))
         }
         reader.endArray()
         reader.endObject()
@@ -46,8 +46,8 @@ fun processApiResponseNewTaipei(stream: java.io.InputStream): ArrayList<zmuzik.u
     return result
 }
 
-fun getStation(reader: android.util.JsonReader): zmuzik.ubike.model.Station {
-    val station: zmuzik.ubike.model.Station = zmuzik.ubike.model.Station()
+fun getStation(reader: android.util.JsonReader): zmuzik.taibike.model.Station {
+    val station: zmuzik.taibike.model.Station = zmuzik.taibike.model.Station()
     reader.beginObject()
     while (reader.hasNext()) {
         val name = reader.nextName()

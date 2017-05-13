@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="zmuzik.ubike.StationsListFragment"
+    tools:context="zmuzik.taibike.StationsListFragment"
     tools:listitem="@layout/fragment_station_list_item" />

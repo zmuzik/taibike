@@ -1,10 +1,10 @@
-package zmuzik.ubike.di
+package zmuzik.taibike.di
 
 import android.content.Context
 import dagger.Component
-import zmuzik.ubike.MainActivity
-import zmuzik.ubike.MainScreenPresenter
-import zmuzik.ubike.StationsListFragment
+import zmuzik.taibike.MainActivity
+import zmuzik.taibike.MainScreenPresenter
+import zmuzik.taibike.StationsListFragment
 
 
 @ActivityScope

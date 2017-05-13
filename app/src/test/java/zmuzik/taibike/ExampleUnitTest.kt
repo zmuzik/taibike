@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.taibike
 
 import org.junit.Test
 

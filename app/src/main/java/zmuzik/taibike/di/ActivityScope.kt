@@ -1,4 +1,4 @@
-package zmuzik.ubike.di
+package zmuzik.taibike.di
 
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy

@@ -1,10 +1,10 @@
-package zmuzik.ubike.di
+package zmuzik.taibike.di
 
 import android.app.Activity
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import zmuzik.ubike.MainScreenPresenter
+import zmuzik.taibike.MainScreenPresenter
 
 @Module
 class MainScreenModule(private val mActivity: Activity) {

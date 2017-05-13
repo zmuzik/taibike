@@ -1,12 +1,12 @@
-package zmuzik.ubike.model
+package zmuzik.taibike.model
 
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import zmuzik.ubike.R
-import zmuzik.ubike.utils.geoDistance
-import zmuzik.ubike.utils.getBitmapDescriptor
+import zmuzik.taibike.R
+import zmuzik.taibike.utils.geoDistance
+import zmuzik.taibike.utils.getBitmapDescriptor
 
 data class Station(
         var id: Int,

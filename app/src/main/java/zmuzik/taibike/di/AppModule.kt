@@ -1,4 +1,4 @@
-package zmuzik.ubike.di
+package zmuzik.taibike.di
 
 import android.app.Application
 import android.content.Context
@@ -9,7 +9,7 @@ import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
-import zmuzik.ubike.App
+import zmuzik.taibike.App
 
 @Module
 class AppModule(internal var mApplication: Application) {

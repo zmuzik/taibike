@@ -1,4 +1,4 @@
-package zmuzik.ubike.utils
+package zmuzik.taibike.utils
 
 import android.content.Context
 import android.content.res.Resources

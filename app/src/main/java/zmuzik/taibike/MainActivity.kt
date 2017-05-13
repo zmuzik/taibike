@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.taibike
 
 import android.content.pm.PackageManager
 import android.location.Location
@@ -20,16 +20,16 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.activity_main.*
-import zmuzik.ubike.bus.LocationUpdatedEvent
-import zmuzik.ubike.bus.ShowStationOnMapEvent
-import zmuzik.ubike.bus.StationsUpdatedEvent
-import zmuzik.ubike.bus.UiBus
-import zmuzik.ubike.di.ActivityScope
-import zmuzik.ubike.di.DaggerMainScreenComponent
-import zmuzik.ubike.di.MainScreenComponent
-import zmuzik.ubike.di.MainScreenModule
-import zmuzik.ubike.model.Station
-import zmuzik.ubike.utils.getFormattedDistance
+import zmuzik.taibike.bus.LocationUpdatedEvent
+import zmuzik.taibike.bus.ShowStationOnMapEvent
+import zmuzik.taibike.bus.StationsUpdatedEvent
+import zmuzik.taibike.bus.UiBus
+import zmuzik.taibike.di.ActivityScope
+import zmuzik.taibike.di.DaggerMainScreenComponent
+import zmuzik.taibike.di.MainScreenComponent
+import zmuzik.taibike.di.MainScreenModule
+import zmuzik.taibike.model.Station
+import zmuzik.taibike.utils.getFormattedDistance
 import javax.inject.Inject
 
 

@@ -1,4 +1,4 @@
-package zmuzik.ubike
+package zmuzik.taibike
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.squareup.otto.Subscribe
-import zmuzik.ubike.bus.StationsUpdatedEvent
-import zmuzik.ubike.bus.UiBus
+import zmuzik.taibike.bus.StationsUpdatedEvent
+import zmuzik.taibike.bus.UiBus
 import javax.inject.Inject
 
 
