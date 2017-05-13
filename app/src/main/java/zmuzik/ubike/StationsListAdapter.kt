@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import zmuzik.ubike.model.Station
+import zmuzik.ubike.utils.getFormattedDistance
 
 class StationsListAdapter(private val values: List<Station>, val location: Location,
                           val presenter: MainScreenPresenter) :
@@ -37,16 +38,6 @@ class StationsListAdapter(private val values: List<Station>, val location: Locat
         holder.map.visibility = View.GONE
 
         holder.map.setOnClickListener { presenter.showStationOnMap(values[position]) }
-    }
-
-    fun getFormattedDistance(dist: Double): String {
-        if (dist < 1) {
-            return "%.0f m".format(dist * 1000)
-        } else if (dist < 10) {
-            return "%.2f km".format(dist)
-        } else {
-            return "%.0f km".format(dist)
-        }
     }
 
     fun toggleVisibility(view: View) {

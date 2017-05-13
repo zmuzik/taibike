@@ -29,8 +29,6 @@ data class Station(
         return MarkerOptions()
                 .position(LatLng(lat, lng))
                 .anchor(1.0f, 1.0f)
-                .title(nameEn)
-                .snippet("$descriptionEn bikes:$presentBikes parking:$parkingSpots")
                 .icon(getBitmapDescriptor(context, R.drawable.ic_pin_green))
     }
 

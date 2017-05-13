@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,12 +29,14 @@ import zmuzik.ubike.di.DaggerMainScreenComponent
 import zmuzik.ubike.di.MainScreenComponent
 import zmuzik.ubike.di.MainScreenModule
 import zmuzik.ubike.model.Station
+import zmuzik.ubike.utils.getFormattedDistance
 import javax.inject.Inject
 
 
 @ActivityScope
 class MainActivity : AppCompatActivity(),
-        BottomNavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        BottomNavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
+        GoogleMap.InfoWindowAdapter {
 
     @Inject
     lateinit var mPresenter: MainScreenPresenter
@@ -124,6 +128,7 @@ class MainActivity : AppCompatActivity(),
         mMap = map
         mMap?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
         mMap?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
+        mMap?.setInfoWindowAdapter(this)
         mMap?.uiSettings?.isZoomControlsEnabled = true
         if (mPresenter.isLocPermission()) mMap?.isMyLocationEnabled = true
         maybeUpdateLocation()
@@ -163,6 +168,31 @@ class MainActivity : AppCompatActivity(),
                 markers.add(marker)
             }
         }
+    }
+
+    override fun getInfoContents(marker: Marker?): View = getInfoView(marker)
+
+    override fun getInfoWindow(marker: Marker?): View = getInfoView(marker)
+
+    fun getInfoView(marker: Marker?): View {
+        val root = layoutInflater.inflate(R.layout.info_window, null)
+        val stationName: TextView = root.findViewById(R.id.stationName) as TextView
+        val description: TextView = root.findViewById(R.id.description) as TextView
+        val bikesPresent: TextView = root.findViewById(R.id.bikesPresent) as TextView
+        val parkingSpots: TextView = root.findViewById(R.id.parkingSpots) as TextView
+        val distance: TextView = root.findViewById(R.id.distance) as TextView
+        val timeUpdated: TextView = root.findViewById(R.id.timeUpdated) as TextView
+        val id: Int = marker?.tag as Int
+        val station = mStationList?.find { it.id == id } ?: return root
+        stationName.text = station.nameEn
+        description.text = station.descriptionEn
+        bikesPresent.text = station.presentBikes.toString()
+        parkingSpots.text = "P " + station.parkingSpots.toString()
+        timeUpdated.text = "Updated " + station.date + " CST"
+        if (mLastLoc != null) {
+            distance.text = getFormattedDistance(station.getDistanceFrom(mLastLoc!!))
+        }
+        return root
     }
 
     inner class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

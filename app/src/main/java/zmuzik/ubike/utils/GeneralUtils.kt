@@ -25,6 +25,16 @@ fun geoDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double 
     return earthRadiusKm * c
 }
 
+fun getFormattedDistance(dist: Double): String {
+    if (dist < 1) {
+        return "%.0f m".format(dist * 1000)
+    } else if (dist < 10) {
+        return "%.2f km".format(dist)
+    } else {
+        return "%.0f km".format(dist)
+    }
+}
+
 fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
 
 fun pxToDp(px: Int): Int = (px / Resources.getSystem().displayMetrics.density).toInt()
