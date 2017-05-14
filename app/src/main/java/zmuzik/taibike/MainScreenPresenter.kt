@@ -34,6 +34,9 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     val API_URL_NEW_TAIPEI = "http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000352-001"
 
     val REQUEST_PERMISSION_LOC = 101
+    val UPDATE_INTERVAL = 20000L //20 seconds
+    val FASTEST_UPDATE_INTERVAL = 2000L //5 seconds
+    val SMALLEST_DISPLACEMENT = 10f //10 meters
 
     @Inject
     lateinit var mActivity: Activity
@@ -133,7 +136,9 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     override fun onConnected(p0: Bundle?) {
         val locationRequest = LocationRequest.create()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.numUpdates = 1
+        locationRequest.interval = UPDATE_INTERVAL
+        locationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL
+        locationRequest.smallestDisplacement = SMALLEST_DISPLACEMENT
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                 locationRequest, this)
     }
