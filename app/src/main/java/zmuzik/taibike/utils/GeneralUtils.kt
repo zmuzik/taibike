@@ -26,7 +26,9 @@ fun geoDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double 
 }
 
 fun getFormattedDistance(dist: Double): String {
-    if (dist < 1) {
+    if (dist < 0) {
+        return ""
+    } else if (dist < 1) {
         return "%.0f m".format(dist * 1000)
     } else if (dist < 10) {
         return "%.2f km".format(dist)

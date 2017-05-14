@@ -32,7 +32,13 @@ data class Station(
                 .icon(getBitmapDescriptor(context, R.drawable.ic_pin_green))
     }
 
-    fun getDistanceFrom(loc: Location): Double = geoDistance(lat, lng, loc.latitude, loc.longitude)
+    fun getDistanceFrom(loc: Location?): Double {
+        if (loc == null) {
+            return -1.0
+        } else {
+            return geoDistance(lat, lng, loc.latitude, loc.longitude)
+        }
+    }
 
     fun getLatLng(): LatLng = LatLng(lat, lng)
 }

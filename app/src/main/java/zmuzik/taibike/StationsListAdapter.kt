@@ -10,7 +10,7 @@ import android.widget.TextView
 import zmuzik.taibike.model.Station
 import zmuzik.taibike.utils.getFormattedDistance
 
-class StationsListAdapter(private val values: List<Station>, val location: Location,
+class StationsListAdapter(private val values: List<Station>, var location: Location?,
                           val presenter: MainScreenPresenter) :
         RecyclerView.Adapter<StationsListAdapter.ViewHolder>() {
 
@@ -42,6 +42,11 @@ class StationsListAdapter(private val values: List<Station>, val location: Locat
 
     fun toggleVisibility(view: View) {
         view.visibility = if (view.visibility == View.GONE) View.VISIBLE else View.GONE
+    }
+
+    fun updateLocation(newLocation: Location) {
+        location = newLocation
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = values.size

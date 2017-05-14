@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.squareup.otto.Subscribe
+import zmuzik.taibike.bus.LocationUpdatedEvent
 import zmuzik.taibike.bus.StationsUpdatedEvent
 import zmuzik.taibike.bus.UiBus
 import javax.inject.Inject
@@ -37,9 +38,11 @@ class StationsListFragment @Inject constructor() : Fragment() {
     }
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
-        if (event.list != null && event.location != null) {
-            recyclerView.adapter = StationsListAdapter(event.list, event.location, presenter)
-        }
+        recyclerView.adapter = StationsListAdapter(event.list, event.location, presenter)
+    }
+
+    @Subscribe fun onLocationUpdate(event: LocationUpdatedEvent) {
+        (recyclerView.adapter as StationsListAdapter).updateLocation(event.location)
     }
 
     override fun onResume() {

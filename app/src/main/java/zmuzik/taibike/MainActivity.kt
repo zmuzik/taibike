@@ -189,9 +189,7 @@ class MainActivity : AppCompatActivity(),
         bikesPresent.text = station.presentBikes.toString()
         parkingSpots.text = "P " + station.parkingSpots.toString()
         timeUpdated.text = "Updated " + station.date + " CST"
-        if (mLastLoc != null) {
-            distance.text = getFormattedDistance(station.getDistanceFrom(mLastLoc!!))
-        }
+        distance.text = getFormattedDistance(station.getDistanceFrom(mLastLoc))
         return root
     }
 

@@ -34,8 +34,8 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     val API_URL_NEW_TAIPEI = "http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000352-001"
 
     val REQUEST_PERMISSION_LOC = 101
-    val UPDATE_INTERVAL = 20000L //20 seconds
-    val FASTEST_UPDATE_INTERVAL = 2000L //5 seconds
+    val UPDATE_INTERVAL = 30000L //30 seconds
+    val FASTEST_UPDATE_INTERVAL = 5000L //5 seconds
     val SMALLEST_DISPLACEMENT = 10f //10 meters
 
     @Inject
