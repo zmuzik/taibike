@@ -54,8 +54,8 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
         if (isResumed) return
         isResumed = true
         requestLocation()
-        requestStationsData(API_URL_TAIPEI)
-        requestStationsData(API_URL_NEW_TAIPEI)
+        requestStationsData(API_URL_TAIPEI, ::processApiResponseTaipei)
+        requestStationsData(API_URL_NEW_TAIPEI, ::processApiResponseNewTaipei)
     }
 
     fun onPause() {
@@ -93,19 +93,14 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
         }
     }
 
-    fun requestStationsData(url: String) {
+    fun requestStationsData(url: String, processApi: (stream: InputStream) -> ArrayList<Station>?) {
         val request = okhttp3.Request.Builder().url(url).build()
         mOkHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
 
             @Throws(IOException::class)
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 val stream: InputStream = response.body().byteStream()
-                var stationsList: ArrayList<Station>? = null
-                if (url == API_URL_TAIPEI) {
-                    stationsList = processApiResponseTaipei(stream)
-                } else if (url == API_URL_NEW_TAIPEI) {
-                    stationsList = processApiResponseNewTaipei(stream)
-                }
+                val stationsList: ArrayList<Station>? = processApi(stream)
                 for (station: Station in stationsList!!) {
                     stations.put(station.id, station)
                 }
