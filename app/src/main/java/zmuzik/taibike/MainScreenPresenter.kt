@@ -1,6 +1,7 @@
 package zmuzik.taibike
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
@@ -128,7 +129,9 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
         UiBus.get().post(ShowStationOnMapEvent(station))
     }
 
+    @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
+        if (!isLocPermission()) return
         val locationRequest = LocationRequest.create()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = UPDATE_INTERVAL
