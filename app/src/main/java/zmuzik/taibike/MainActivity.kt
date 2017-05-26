@@ -1,5 +1,6 @@
 package zmuzik.taibike
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -109,6 +110,7 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
+    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         if (requestCode == mPresenter.REQUEST_PERMISSION_LOC) {
