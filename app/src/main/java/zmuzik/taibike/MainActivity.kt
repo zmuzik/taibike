@@ -126,6 +126,7 @@ class MainActivity : AppCompatActivity(),
         maybeUpdateLocation()
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
         mMap?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
