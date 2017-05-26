@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity(),
         GoogleMap.InfoWindowAdapter {
 
     @Inject
-    lateinit var mPresenter: MainScreenPresenter
+    lateinit var presenter: MainScreenPresenter
 
-    lateinit var mComponent: MainScreenComponent
+    lateinit var component: MainScreenComponent
 
     val mapFragment: SupportMapFragment = SupportMapFragment.newInstance()
     val listFragment: StationsListFragment = StationsListFragment()
@@ -51,10 +51,10 @@ class MainActivity : AppCompatActivity(),
     val PREF_MIN_ZOOM_LEVEL: Float = 10f
     val PREF_MAX_ZOOM_LEVEL: Float = 20f
 
-    var mStationList: List<Station>? = null
-    var mMap: GoogleMap? = null
-    var mLastLoc: Location? = null
-    var mIsZoomedInPosition: Boolean = false
+    var stationList: List<Station>? = null
+    var map: GoogleMap? = null
+    var lastLoc: Location? = null
+    var isZoomedInPosition: Boolean = false
     lateinit var markers: ArrayList<Marker>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,24 +81,24 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun inject() {
-        mComponent = DaggerMainScreenComponent.builder()
+        component = DaggerMainScreenComponent.builder()
                 .appComponent((applicationContext as App).appComponent)
                 .mainScreenModule(MainScreenModule(this))
                 .build()
-        mComponent.inject(this)
-        mComponent.inject(mPresenter)
-        mComponent.inject(listFragment)
+        component.inject(this)
+        component.inject(presenter)
+        component.inject(listFragment)
     }
 
     override fun onStart() {
         super.onStart()
-        mPresenter.onStart()
+        presenter.onStart()
         UiBus.get().register(this)
     }
 
     override fun onStop() {
         super.onStop()
-        mPresenter.onStop()
+        presenter.onStop()
         UiBus.get().unregister(this)
     }
 
@@ -113,60 +113,60 @@ class MainActivity : AppCompatActivity(),
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
-        if (requestCode == mPresenter.REQUEST_PERMISSION_LOC) {
+        if (requestCode == presenter.REQUEST_PERMISSION_LOC) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mPresenter.requestLocation()
-                mMap?.isMyLocationEnabled = true
+                presenter.requestLocation()
+                map?.isMyLocationEnabled = true
             }
         }
     }
 
     @Subscribe fun onLocationChanged(event: LocationUpdatedEvent) {
-        mLastLoc = event.location
+        lastLoc = event.location
         maybeUpdateLocation()
     }
 
     @SuppressLint("MissingPermission")
-    override fun onMapReady(map: GoogleMap?) {
-        mMap = map
-        mMap?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
-        mMap?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
-        mMap?.setInfoWindowAdapter(this)
-        mMap?.uiSettings?.isZoomControlsEnabled = true
-        if (mPresenter.isLocPermission()) mMap?.isMyLocationEnabled = true
+    override fun onMapReady(newMap: GoogleMap?) {
+        map = newMap
+        map?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
+        map?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
+        map?.setInfoWindowAdapter(this)
+        map?.uiSettings?.isZoomControlsEnabled = true
+        if (presenter.isLocPermission()) map?.isMyLocationEnabled = true
         maybeUpdateLocation()
         maybeRedrawMarkers()
     }
 
     private fun maybeUpdateLocation() {
-        if (mMap != null && mLastLoc != null) {
-            val ll: LatLng = LatLng(mLastLoc!!.latitude, mLastLoc!!.longitude)
-            if (!mIsZoomedInPosition) {
-                mMap!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
-                mMap!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
-                mIsZoomedInPosition = true
+        if (map != null && lastLoc != null) {
+            val ll: LatLng = LatLng(lastLoc!!.latitude, lastLoc!!.longitude)
+            if (!isZoomedInPosition) {
+                map!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
+                map!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
+                isZoomedInPosition = true
             }
         }
     }
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
-        mStationList = event.list
+        stationList = event.list
         maybeRedrawMarkers()
     }
 
     @Subscribe fun onShowStationOnMapRequested(event: ShowStationOnMapEvent) {
         viewPager.setCurrentItem(0, true)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
+        map?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
         val marker = markers.find { it.tag == event.station.id } as Marker
         marker.showInfoWindow()
     }
 
     fun maybeRedrawMarkers() {
-        if (mStationList != null && mMap != null) {
-            mMap!!.clear()
+        if (stationList != null && map != null) {
+            map!!.clear()
             markers = ArrayList<Marker>()
-            for (station: Station in mStationList!!) {
-                val marker = mMap!!.addMarker(station.getMarkerOptions(this))
+            for (station: Station in stationList!!) {
+                val marker = map!!.addMarker(station.getMarkerOptions(this))
                 marker.tag = station.id
                 markers.add(marker)
             }
@@ -186,13 +186,13 @@ class MainActivity : AppCompatActivity(),
         val distance: TextView = root.findViewById(R.id.distance) as TextView
         val timeUpdated: TextView = root.findViewById(R.id.timeUpdated) as TextView
         val id: Int = marker?.tag as Int
-        val station = mStationList?.find { it.id == id } ?: return root
+        val station = stationList?.find { it.id == id } ?: return root
         stationName.text = station.nameEn
         description.text = station.descriptionEn
         bikesPresent.text = station.presentBikes.toString()
         parkingSpots.text = "P " + station.parkingSpots.toString()
         timeUpdated.text = "Updated " + station.date + " CST"
-        distance.text = getFormattedDistance(station.getDistanceFrom(mLastLoc))
+        distance.text = getFormattedDistance(station.getDistanceFrom(lastLoc))
         return root
     }
 

@@ -40,12 +40,12 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     val SMALLEST_DISPLACEMENT = 10f //10 meters
 
     @Inject
-    lateinit var mActivity: Activity
+    lateinit var activity: Activity
 
     @Inject
-    lateinit var mOkHttpClient: OkHttpClient
+    lateinit var okHttpClient: OkHttpClient
 
-    var mGoogleApiClient: GoogleApiClient? = null
+    var googleApiClient: GoogleApiClient? = null
 
     var stations: HashMap<Int, Station> = HashMap()
     var location: Location? = null
@@ -62,26 +62,26 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     fun onStop() {
         if (!isStarted) return
         isStarted = false
-        if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
-            mGoogleApiClient!!.disconnect()
+        if (googleApiClient != null && googleApiClient!!.isConnected) {
+            googleApiClient!!.disconnect()
         }
     }
 
     fun isLocPermission(): Boolean {
-        return ActivityCompat.checkSelfPermission(mActivity,
+        return ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     fun requestLocation() {
         if (isLocPermission()) {
-            if (mGoogleApiClient == null) {
-                mGoogleApiClient = GoogleApiClient.Builder(mActivity)
+            if (googleApiClient == null) {
+                googleApiClient = GoogleApiClient.Builder(activity)
                         .addApi(LocationServices.API)
                         .addConnectionCallbacks(this)
                         .addOnConnectionFailedListener(this)
                         .build()
             }
-            mGoogleApiClient?.connect()
+            googleApiClient?.connect()
         } else {
             requestLocationPermission()
         }
@@ -89,14 +89,14 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
 
     private fun requestLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mActivity.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            activity.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     REQUEST_PERMISSION_LOC)
         }
     }
 
     fun requestStationsData(url: String, processApi: (stream: InputStream) -> ArrayList<Station>?) {
         val request = okhttp3.Request.Builder().url(url).build()
-        mOkHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
+        okHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
 
             @Throws(IOException::class)
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
@@ -137,7 +137,7 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
         locationRequest.interval = UPDATE_INTERVAL
         locationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL
         locationRequest.smallestDisplacement = SMALLEST_DISPLACEMENT
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,
                 locationRequest, this)
     }
 
@@ -145,7 +145,7 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     }
 
     override fun onConnectionSuspended(p0: Int) {
-        mGoogleApiClient?.connect()
+        googleApiClient?.connect()
     }
 
     override fun onLocationChanged(loc: Location?) {
