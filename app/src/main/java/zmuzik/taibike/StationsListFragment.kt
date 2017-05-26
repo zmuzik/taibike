@@ -45,13 +45,13 @@ class StationsListFragment @Inject constructor() : Fragment() {
         (recyclerView.adapter as? StationsListAdapter)?.updateLocation(event.location)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         UiBus.get().register(this)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         UiBus.get().unregister(this)
     }
 }
