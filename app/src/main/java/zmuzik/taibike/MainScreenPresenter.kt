@@ -48,19 +48,19 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
 
     var stations: HashMap<Int, Station> = HashMap()
     var location: Location? = null
-    var isResumed: Boolean = false
+    var isStarted: Boolean = false
 
-    fun onResume() {
-        if (isResumed) return
-        isResumed = true
+    fun onStart() {
+        if (isStarted) return
+        isStarted = true
         requestLocation()
         requestStationsData(API_URL_TAIPEI, ::processApiResponseTaipei)
         requestStationsData(API_URL_NEW_TAIPEI, ::processApiResponseNewTaipei)
     }
 
-    fun onPause() {
-        if (!isResumed) return
-        isResumed = false
+    fun onStop() {
+        if (!isStarted) return
+        isStarted = false
         if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
             mGoogleApiClient!!.disconnect()
         }

@@ -89,15 +89,15 @@ class MainActivity : AppCompatActivity(),
         mComponent.inject(listFragment)
     }
 
-    override fun onResume() {
-        super.onResume()
-        mPresenter.onResume()
+    override fun onStart() {
+        super.onStart()
+        mPresenter.onStart()
         UiBus.get().register(this)
     }
 
-    override fun onPause() {
+    override fun onStop() {
         super.onStop()
-        mPresenter.onPause()
+        mPresenter.onStop()
         UiBus.get().unregister(this)
     }
 

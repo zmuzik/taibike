@@ -42,7 +42,7 @@ class StationsListFragment @Inject constructor() : Fragment() {
     }
 
     @Subscribe fun onLocationUpdate(event: LocationUpdatedEvent) {
-        (recyclerView.adapter as StationsListAdapter).updateLocation(event.location)
+        (recyclerView.adapter as? StationsListAdapter)?.updateLocation(event.location)
     }
 
     override fun onResume() {
