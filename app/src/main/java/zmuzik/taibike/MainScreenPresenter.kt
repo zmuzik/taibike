@@ -115,7 +115,7 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     }
 
     private fun maybePublishStationsUpdate() {
-        if (location == null || stations.isEmpty()) return
+        if (stations.isEmpty()) return
 
         val sortedStations: List<Station> = if (location == null) {
             ArrayList(stations.values)
