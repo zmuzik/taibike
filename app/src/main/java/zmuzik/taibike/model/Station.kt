@@ -42,11 +42,7 @@ data class Station(
     }
 
     fun getDistanceFrom(loc: Location?): Double {
-        if (loc == null) {
-            return -1.0
-        } else {
-            return geoDistance(lat, lng, loc.latitude, loc.longitude)
-        }
+        return if (loc == null) -1.0 else geoDistance(lat, lng, loc.latitude, loc.longitude)
     }
 
     fun getLatLng(): LatLng = LatLng(lat, lng)
