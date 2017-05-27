@@ -29,7 +29,16 @@ data class Station(
         return MarkerOptions()
                 .position(LatLng(lat, lng))
                 .anchor(1.0f, 1.0f)
-                .icon(getBitmapDescriptor(context, R.drawable.ic_pin_green))
+                .icon(getBitmapDescriptor(context, getIcon()))
+    }
+
+    fun getIcon(): Int {
+        return when {
+            presentBikes > 0 && parkingSpots > 0 -> R.drawable.ic_pin_green
+            presentBikes == 0 && parkingSpots > 0 -> R.drawable.ic_pin_orange
+            presentBikes > 0 && parkingSpots == 0 -> R.drawable.ic_pin_red
+            else -> R.drawable.ic_pin_gray
+        }
     }
 
     fun getDistanceFrom(loc: Location?): Double {

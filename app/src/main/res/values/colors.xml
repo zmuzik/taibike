@@ -14,10 +14,10 @@
     <color name="gray">#FF888888</color>
     <color name="black">#FF000000</color>
 
-    <color name="pinGreen">#FFA0EC10</color>
-    <color name="pinOrange">#FFEE9011</color>
-    <color name="pinRed">#FFE81B0E</color>
-    <color name="pinGray">#FF707070</color>
+    <color name="pinGreen">#FFA0EC10</color>    <!--bikes and parking spots available-->
+    <color name="pinOrange">#FFEE9011</color>   <!--no bikes, parking possible-->
+    <color name="pinRed">#FFE81B0E</color>      <!--bikes available, no parking-->
+    <color name="pinGray">#FF707070</color>     <!--no bikes, no parking-->
 
     <!--bike colors-->
     <color name="yellow">#FFFFB902</color>
