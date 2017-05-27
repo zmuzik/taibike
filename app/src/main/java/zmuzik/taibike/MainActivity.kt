@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(),
     val listFragment: StationsListFragment = StationsListFragment()
 
     val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
-    val PREF_MIN_ZOOM_LEVEL: Float = 10f
+    val PREF_MIN_ZOOM_LEVEL: Float = 12f
     val PREF_MAX_ZOOM_LEVEL: Float = 20f
 
     var stationList: List<Station>? = null
