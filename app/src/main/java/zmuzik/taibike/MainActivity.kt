@@ -139,13 +139,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun maybeUpdateLocation() {
-        if (map != null && lastLoc != null) {
+        if (map != null && lastLoc != null && !isZoomedInPosition) {
             val ll: LatLng = LatLng(lastLoc!!.latitude, lastLoc!!.longitude)
-            if (!isZoomedInPosition) {
-                map!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
-                map!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
-                isZoomedInPosition = true
-            }
+            map!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
+            map!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
+            isZoomedInPosition = true
         }
     }
 
