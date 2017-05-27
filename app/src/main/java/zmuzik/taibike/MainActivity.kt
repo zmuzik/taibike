@@ -155,8 +155,8 @@ class MainActivity : AppCompatActivity(),
     @Subscribe fun onShowStationOnMapRequested(event: ShowStationOnMapEvent) {
         viewPager.setCurrentItem(0, true)
         map?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
-        val marker = markers.find { it.tag == event.station.id } as Marker
-        marker.showInfoWindow()
+        val marker : Marker? = markers.find { it.tag == event.station.id } as Marker
+        marker?.showInfoWindow()
     }
 
     fun maybeRedrawMarkers() {
