@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(),
     var map: GoogleMap? = null
     var lastLoc: Location? = null
     var isZoomedInPosition: Boolean = false
-    lateinit var markers: ArrayList<Marker>
+    var markers: ArrayList<Marker>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,9 +153,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     @Subscribe fun onShowStationOnMapRequested(event: ShowStationOnMapEvent) {
+        if (markers == null) return
         viewPager.setCurrentItem(0, true)
         map?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
-        val marker : Marker? = markers.find { it.tag == event.station.id } as Marker
+        val marker: Marker? = markers!!.find { it.tag == event.station.id } as Marker
         marker?.showInfoWindow()
     }
 
@@ -166,7 +167,7 @@ class MainActivity : AppCompatActivity(),
             for (station: Station in stationList!!) {
                 val marker = map!!.addMarker(station.getMarkerOptions(this))
                 marker.tag = station.id
-                markers.add(marker)
+                markers!!.add(marker)
             }
         }
     }
