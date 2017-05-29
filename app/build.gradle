@@ -1,36 +1,81 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: "kotlin-android-extensions"
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 repositories {
     mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+def getVersionCode = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--first-parent', '--count', 'master'
+            standardOutput = stdout
+        }
+        return Integer.parseInt(stdout.toString().trim())
+    }
+    catch (ignored) {
+        return 1;
+    }
 }
 
 android {
+    Properties customProps = new Properties()
+    customProps.load(new FileInputStream("../secrets/zmuzik.taibike.properties"))
+
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+
     defaultConfig {
         applicationId "zmuzik.taibike"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1
+        versionCode getVersionCode()
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key",
                 (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
+        buildConfigField("String", "FLICKR_API_KEY", customProps.FLICKR_API_KEY)
+        archivesBaseName = "zmuzik.taibike-v$versionName"
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../../secrets/zmuzik.keystore")
+            keyAlias customProps.KEY_ALIAS
+            storePassword customProps.STORE_PASSWORD
+            keyPassword customProps.KEY_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
         main.java.srcDirs += [file("$buildDir/generated/source/kapt/main")]
     }
@@ -67,4 +112,7 @@ dependencies {
     compile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile("com.crashlytics.sdk.android:crashlytics:2.6.8@aar") {
+        transitive = true
+    }
 }
