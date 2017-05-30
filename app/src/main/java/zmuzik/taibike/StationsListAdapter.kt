@@ -9,10 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import zmuzik.taibike.model.Station
 import zmuzik.taibike.utils.getFormattedDistance
+import javax.inject.Inject
 
-class StationsListAdapter(private val values: List<Station>, var location: Location?,
-                          val presenter: MainScreenPresenter) :
+class StationsListAdapter(private val values: List<Station>, var location: Location?) :
         RecyclerView.Adapter<StationsListAdapter.ViewHolder>() {
+
+    @Inject
+    lateinit var presenter: MainScreenPresenter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

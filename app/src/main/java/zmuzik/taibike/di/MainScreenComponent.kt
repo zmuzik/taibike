@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Component
 import zmuzik.taibike.MainActivity
 import zmuzik.taibike.MainScreenPresenter
+import zmuzik.taibike.StationsListAdapter
 import zmuzik.taibike.StationsListFragment
 
 
@@ -15,7 +16,7 @@ interface MainScreenComponent {
 
     fun inject(presenter: MainScreenPresenter)
 
-    fun inject(fragment: StationsListFragment)
+    fun inject(adapter: StationsListAdapter)
 
     val activityContext: Context
 

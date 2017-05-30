@@ -1,5 +1,6 @@
 package zmuzik.taibike
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -13,15 +14,19 @@ import com.squareup.otto.Subscribe
 import zmuzik.taibike.bus.LocationUpdatedEvent
 import zmuzik.taibike.bus.StationsUpdatedEvent
 import zmuzik.taibike.bus.UiBus
+import zmuzik.taibike.di.ActivityScope
+import zmuzik.taibike.utils.log
 import javax.inject.Inject
 
 
+@ActivityScope
 class StationsListFragment @Inject constructor() : Fragment() {
 
     lateinit var recyclerView: RecyclerView
 
-    @Inject
-    lateinit var presenter: MainScreenPresenter
+    init {
+        log("creating new list fragment")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +43,12 @@ class StationsListFragment @Inject constructor() : Fragment() {
     }
 
     @Subscribe fun onStationListUpdated(event: StationsUpdatedEvent) {
-        recyclerView.adapter = StationsListAdapter(event.list, event.location, presenter)
+        recyclerView.adapter = StationsListAdapter(event.list, event.location)
+        val component = (activity as MainActivity).component
+        component.let {
+            component.inject(recyclerView.adapter as StationsListAdapter)
+        }
+
     }
 
     @Subscribe fun onLocationUpdate(event: LocationUpdatedEvent) {

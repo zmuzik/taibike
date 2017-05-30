@@ -31,6 +31,7 @@ import zmuzik.taibike.di.MainScreenComponent
 import zmuzik.taibike.di.MainScreenModule
 import zmuzik.taibike.model.Station
 import zmuzik.taibike.utils.getFormattedDistance
+import zmuzik.taibike.utils.log
 import javax.inject.Inject
 
 
@@ -39,17 +40,16 @@ class MainActivity : AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
         GoogleMap.InfoWindowAdapter {
 
-    @Inject
-    lateinit var presenter: MainScreenPresenter
+    val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
+    val PREF_MIN_ZOOM_LEVEL: Float = 10f
+    val PREF_MAX_ZOOM_LEVEL: Float = 20f
 
     lateinit var component: MainScreenComponent
 
-    val mapFragment: SupportMapFragment = SupportMapFragment.newInstance()
-    val listFragment: StationsListFragment = StationsListFragment()
-
-    val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
-    val PREF_MIN_ZOOM_LEVEL: Float = 12f
-    val PREF_MAX_ZOOM_LEVEL: Float = 20f
+    @Inject
+    lateinit var presenter: MainScreenPresenter
+    var mapFragment: SupportMapFragment? = null
+    var listFragment: StationsListFragment? = null
 
     var stationList: List<Station>? = null
     var map: GoogleMap? = null
@@ -59,24 +59,25 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (mapFragment == null) mapFragment = SupportMapFragment.newInstance()
+        if (listFragment == null) listFragment = StationsListFragment()
         inject()
         setContentView(R.layout.activity_main)
-        mapFragment.getMapAsync(this)
+        mapFragment?.getMapAsync(this)
         navigation.setOnNavigationItemSelectedListener(this)
         viewPager.adapter = PagesAdapter(supportFragmentManager)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-                when (position) {
-                    0 -> navigation.selectedItemId = R.id.navigation_map
-                    1 -> navigation.selectedItemId = R.id.navigation_list
+                navigation.selectedItemId = when (position) {
+                    0 -> R.id.navigation_map
+                    else -> R.id.navigation_list
                 }
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageScrolled(position: Int, positionOffset: Float,
-                                        positionOffsetPixels: Int) {
-            }
+                                        positionOffsetPixels: Int) {}
         })
     }
 
@@ -87,7 +88,6 @@ class MainActivity : AppCompatActivity(),
                 .build()
         component.inject(this)
         component.inject(presenter)
-        component.inject(listFragment)
     }
 
     override fun onStart() {
@@ -200,11 +200,11 @@ class MainActivity : AppCompatActivity(),
         override fun getCount(): Int = 2
 
         override fun getItem(position: Int): Fragment? {
-            when (position) {
-                0 -> return mapFragment
-                1 -> return listFragment
+            return when (position) {
+                0 -> mapFragment
+                1 -> listFragment
+                else -> null
             }
-            return null
         }
     }
 }
