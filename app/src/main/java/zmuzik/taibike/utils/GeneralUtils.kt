@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.util.Log
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
@@ -50,4 +51,12 @@ fun getBitmapDescriptor(context: Context, id: Int): BitmapDescriptor {
     val canvas = Canvas(bm)
     vectorDrawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
+}
+
+fun log(message: String) {
+    Log.d("LOG", message)
+}
+
+fun log(clazz: Unit, message: String) {
+    Log.d(clazz.javaClass.simpleName, message)
 }
