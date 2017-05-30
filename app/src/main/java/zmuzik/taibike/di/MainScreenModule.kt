@@ -10,11 +10,13 @@ import zmuzik.taibike.MainScreenPresenter
 class MainScreenModule(private val mActivity: Activity) {
 
     @Provides
+    @ActivityScope
     internal fun provideContext(): Context {
         return mActivity
     }
 
     @Provides
+    @ActivityScope
     internal fun provideActivity(): Activity {
         return mActivity
     }
