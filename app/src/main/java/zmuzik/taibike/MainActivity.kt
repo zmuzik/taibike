@@ -7,8 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -32,6 +31,7 @@ import zmuzik.taibike.di.MainScreenComponent
 import zmuzik.taibike.di.MainScreenModule
 import zmuzik.taibike.model.Station
 import zmuzik.taibike.utils.getFormattedDistance
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 
@@ -41,30 +41,26 @@ class MainActivity : AppCompatActivity(),
         GoogleMap.InfoWindowAdapter {
 
     val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
+    val CITY_ZOOM_LEVEL: Float = 13f
     val PREF_MIN_ZOOM_LEVEL: Float = 10f
     val PREF_MAX_ZOOM_LEVEL: Float = 20f
+    val TAIPEI_CENTER_COORDS = LatLng(25.0410, 121.5438)
 
     lateinit var component: MainScreenComponent
 
     @Inject
     lateinit var presenter: MainScreenPresenter
-    var mapFragment: SupportMapFragment? = null
-    var listFragment: StationsListFragment? = null
 
-    var stationList: List<Station>? = null
+    var stationList: List<Station> = ArrayList()
+    var markers: ArrayList<Marker> = ArrayList()
     var map: GoogleMap? = null
     var lastLoc: Location? = null
     var isZoomedInPosition: Boolean = false
-    var markers: ArrayList<Marker> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (mapFragment == null) mapFragment = SupportMapFragment.newInstance()
-        if (listFragment == null) listFragment = StationsListFragment()
-        inject()
         setContentView(R.layout.activity_main)
-        mapFragment?.getMapAsync(this)
-        navigation.setOnNavigationItemSelectedListener(this)
+        inject()
         viewPager.adapter = PagesAdapter(supportFragmentManager)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
@@ -80,6 +76,8 @@ class MainActivity : AppCompatActivity(),
                                         positionOffsetPixels: Int) {
             }
         })
+        navigation.setOnNavigationItemSelectedListener(this)
+        (viewPager.adapter as PagesAdapter).getMapFr().getMapAsync(this)
     }
 
     private fun inject() {
@@ -128,23 +126,33 @@ class MainActivity : AppCompatActivity(),
     }
 
     @SuppressLint("MissingPermission")
-    override fun onMapReady(newMap: GoogleMap?) {
+    override fun onMapReady(newMap: GoogleMap) {
         map = newMap
-        map?.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
-        map?.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
-        map?.setInfoWindowAdapter(this)
-        map?.uiSettings?.isZoomControlsEnabled = true
-        if (presenter.isLocPermission()) map?.isMyLocationEnabled = true
+        newMap.setMinZoomPreference(PREF_MIN_ZOOM_LEVEL)
+        newMap.setMaxZoomPreference(PREF_MAX_ZOOM_LEVEL)
+        newMap.setInfoWindowAdapter(this)
+        newMap.uiSettings?.isZoomControlsEnabled = true
+        if (presenter.isLocPermission()) newMap.isMyLocationEnabled = true
         maybeUpdateLocation()
         maybeRedrawMarkers()
     }
 
     private fun maybeUpdateLocation() {
-        if (map != null && lastLoc != null && !isZoomedInPosition) {
-            val ll: LatLng = LatLng(lastLoc!!.latitude, lastLoc!!.longitude)
-            map!!.moveCamera(CameraUpdateFactory.newLatLng(ll))
-            map!!.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
-            isZoomedInPosition = true
+        map?.let {
+            if (isZoomedInPosition) {
+                // no map to zoom or already zoomed, do nothing
+                return
+            } else if (lastLoc == null) {
+                // no precise location (yet), zoom to taipei
+                it.moveCamera(CameraUpdateFactory.newLatLng(TAIPEI_CENTER_COORDS))
+                it.moveCamera(CameraUpdateFactory.zoomTo(CITY_ZOOM_LEVEL))
+            } else {
+                // zoom to precise location
+                val ll: LatLng = LatLng(lastLoc!!.latitude, lastLoc!!.longitude)
+                it.moveCamera(CameraUpdateFactory.newLatLng(ll))
+                it.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
+                isZoomedInPosition = true
+            }
         }
     }
 
@@ -154,18 +162,21 @@ class MainActivity : AppCompatActivity(),
     }
 
     @Subscribe fun onShowStationOnMapRequested(event: ShowStationOnMapEvent) {
-        viewPager.setCurrentItem(0, true)
-        map?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
-        val marker: Marker? = markers.find { it.tag == event.station.id } as Marker
-        marker?.showInfoWindow()
+        map?.let {
+            viewPager.setCurrentItem(0, true)
+            it.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
+            it.moveCamera(CameraUpdateFactory.zoomTo(INITIAL_FORCE_ZOOM_LEVEL))
+            val marker: Marker? = markers.find { it.tag == event.station.id }
+            marker?.showInfoWindow()
+        }
     }
 
     fun maybeRedrawMarkers() {
-        if (stationList != null && map != null) {
-            map!!.clear()
+        map?.let {
+            it.clear()
             markers = ArrayList<Marker>()
-            for (station: Station in stationList!!) {
-                val marker = map!!.addMarker(station.getMarkerOptions(this))
+            for (station: Station in stationList) {
+                val marker = it.addMarker(station.getMarkerOptions(this))
                 marker.tag = station.id
                 markers.add(marker)
             }
@@ -185,7 +196,7 @@ class MainActivity : AppCompatActivity(),
         val distance: TextView = root.findViewById(R.id.distance) as TextView
         val timeUpdated: TextView = root.findViewById(R.id.timeUpdated) as TextView
         val id: Int = marker?.tag as Int
-        val station = stationList?.find { it.id == id } ?: return root
+        val station = stationList.find { it.id == id } ?: return root
         stationName.text = station.nameEn
         description.text = station.descriptionEn
         bikesPresent.text = station.presentBikes.toString()
@@ -195,16 +206,32 @@ class MainActivity : AppCompatActivity(),
         return root
     }
 
-    inner class PagesAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    inner class PagesAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        var mapFragment: WeakReference<SupportMapFragment>? = null
+        var listFragment: WeakReference<StationsListFragment>? = null
 
         override fun getCount(): Int = 2
 
-        override fun getItem(position: Int): Fragment? {
+        override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> mapFragment
-                1 -> listFragment
-                else -> null
+                0 -> getMapFr()
+                else -> getListFr()
             }
+        }
+
+        fun getMapFr(): SupportMapFragment {
+            if (mapFragment == null || mapFragment?.get() == null) {
+                mapFragment = WeakReference(SupportMapFragment.newInstance())
+            }
+            return mapFragment!!.get()!!
+        }
+
+        fun getListFr(): StationsListFragment {
+            if (listFragment == null || listFragment?.get() == null) {
+                listFragment = WeakReference(StationsListFragment())
+            }
+            return listFragment!!.get()!!
         }
     }
 }
