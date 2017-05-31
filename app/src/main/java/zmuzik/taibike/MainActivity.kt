@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(),
         GoogleMap.InfoWindowAdapter {
 
     val INITIAL_FORCE_ZOOM_LEVEL: Float = 16f
-    val CITY_ZOOM_LEVEL: Float = 13f
+    val CITY_ZOOM_LEVEL: Float = 14f
     val PREF_MIN_ZOOM_LEVEL: Float = 10f
     val PREF_MAX_ZOOM_LEVEL: Float = 20f
     val TAIPEI_CENTER_COORDS = LatLng(25.0410, 121.5438)
