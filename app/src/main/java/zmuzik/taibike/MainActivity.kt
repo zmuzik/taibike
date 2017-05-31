@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -31,7 +32,6 @@ import zmuzik.taibike.di.MainScreenComponent
 import zmuzik.taibike.di.MainScreenModule
 import zmuzik.taibike.model.Station
 import zmuzik.taibike.utils.getFormattedDistance
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 
@@ -57,6 +57,9 @@ class MainActivity : AppCompatActivity(),
     var lastLoc: Location? = null
     var isZoomedInPosition: Boolean = false
 
+    var mapFragment: SupportMapFragment? = null
+    var listFragment: StationsListFragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -77,7 +80,6 @@ class MainActivity : AppCompatActivity(),
             }
         })
         navigation.setOnNavigationItemSelectedListener(this)
-        (viewPager.adapter as PagesAdapter).getMapFr().getMapAsync(this)
     }
 
     private fun inject() {
@@ -208,30 +210,25 @@ class MainActivity : AppCompatActivity(),
 
     inner class PagesAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        var mapFragment: WeakReference<SupportMapFragment>? = null
-        var listFragment: WeakReference<StationsListFragment>? = null
-
         override fun getCount(): Int = 2
+
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            val createdFragment = super.instantiateItem(container, position) as Fragment
+            when (position) {
+                0 -> {
+                    mapFragment = createdFragment as SupportMapFragment
+                    mapFragment?.getMapAsync(this@MainActivity)
+                }
+                1 -> listFragment = createdFragment as StationsListFragment
+            }
+            return createdFragment
+        }
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> getMapFr()
-                else -> getListFr()
+                0 -> SupportMapFragment.newInstance()
+                else -> StationsListFragment()
             }
-        }
-
-        fun getMapFr(): SupportMapFragment {
-            if (mapFragment == null || mapFragment?.get() == null) {
-                mapFragment = WeakReference(SupportMapFragment.newInstance())
-            }
-            return mapFragment!!.get()!!
-        }
-
-        fun getListFr(): StationsListFragment {
-            if (listFragment == null || listFragment?.get() == null) {
-                listFragment = WeakReference(StationsListFragment())
-            }
-            return listFragment!!.get()!!
         }
     }
 }
