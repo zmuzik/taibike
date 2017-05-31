@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -31,7 +32,6 @@ import zmuzik.taibike.di.MainScreenComponent
 import zmuzik.taibike.di.MainScreenModule
 import zmuzik.taibike.model.Station
 import zmuzik.taibike.utils.getFormattedDistance
-import zmuzik.taibike.utils.log
 import javax.inject.Inject
 
 
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(),
     var map: GoogleMap? = null
     var lastLoc: Location? = null
     var isZoomedInPosition: Boolean = false
-    var markers: ArrayList<Marker>? = null
+    var markers: ArrayList<Marker> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +77,8 @@ class MainActivity : AppCompatActivity(),
             override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageScrolled(position: Int, positionOffset: Float,
-                                        positionOffsetPixels: Int) {}
+                                        positionOffsetPixels: Int) {
+            }
         })
     }
 
@@ -153,10 +154,9 @@ class MainActivity : AppCompatActivity(),
     }
 
     @Subscribe fun onShowStationOnMapRequested(event: ShowStationOnMapEvent) {
-        if (markers == null) return
         viewPager.setCurrentItem(0, true)
         map?.moveCamera(CameraUpdateFactory.newLatLng(event.station.getLatLng()))
-        val marker: Marker? = markers!!.find { it.tag == event.station.id } as Marker
+        val marker: Marker? = markers.find { it.tag == event.station.id } as Marker
         marker?.showInfoWindow()
     }
 
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity(),
             for (station: Station in stationList!!) {
                 val marker = map!!.addMarker(station.getMarkerOptions(this))
                 marker.tag = station.id
-                markers!!.add(marker)
+                markers.add(marker)
             }
         }
     }
