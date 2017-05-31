@@ -6,7 +6,7 @@ Live information about public bicycle stations in Taiwan.
 * Information about station position, bicycles and parking slots available.
 * English language supported!
 
-<a href='https://play.google.com/store/apps/details?id=zmuzik.taibike2&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='323' height='125' /></a>
+<a href='https://play.google.com/store/apps/details?id=zmuzik.taibike&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='323' height='125' /></a>
 
 License
 --------
