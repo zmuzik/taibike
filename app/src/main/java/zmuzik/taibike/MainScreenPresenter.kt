@@ -62,9 +62,7 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     fun onStop() {
         if (!isStarted) return
         isStarted = false
-        if (googleApiClient != null && googleApiClient!!.isConnected) {
-            googleApiClient!!.disconnect()
-        }
+        googleApiClient?.let { if (it.isConnected) it.disconnect() }
     }
 
     fun isLocPermission(): Boolean {
