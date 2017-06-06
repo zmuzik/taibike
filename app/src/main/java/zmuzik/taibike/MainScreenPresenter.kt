@@ -92,15 +92,15 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
         }
     }
 
-    fun requestStationsData(url: String, processApi: (stream: InputStream) -> ArrayList<Station>?) {
+    fun requestStationsData(url: String, processApi: (stream: InputStream) -> ArrayList<Station>) {
         val request = okhttp3.Request.Builder().url(url).build()
         okHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
 
             @Throws(IOException::class)
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 val stream: InputStream = response.body().byteStream()
-                val stationsList: ArrayList<Station>? = processApi(stream)
-                for (station: Station in stationsList!!) {
+                val stationsList: ArrayList<Station> = processApi(stream)
+                for (station: Station in stationsList) {
                     stations.put(station.id, station)
                 }
                 maybePublishStationsUpdate()
