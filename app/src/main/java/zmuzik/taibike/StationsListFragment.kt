@@ -1,6 +1,5 @@
 package zmuzik.taibike
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -15,7 +14,6 @@ import zmuzik.taibike.bus.LocationUpdatedEvent
 import zmuzik.taibike.bus.StationsUpdatedEvent
 import zmuzik.taibike.bus.UiBus
 import zmuzik.taibike.di.ActivityScope
-import zmuzik.taibike.utils.log
 import javax.inject.Inject
 
 
@@ -24,17 +22,13 @@ class StationsListFragment @Inject constructor() : Fragment() {
 
     lateinit var recyclerView: RecyclerView
 
-    init {
-        log("creating new list fragment")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater!!.inflate(R.layout.fragment_station_list, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_station_list, container, false)
         recyclerView = rootView as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(view?.context)
         val dividerDecoration = DividerItemDecoration(recyclerView.context, LinearLayout.VERTICAL)
