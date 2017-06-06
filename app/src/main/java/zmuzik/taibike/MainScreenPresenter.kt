@@ -115,11 +115,8 @@ class MainScreenPresenter @Inject constructor() : LocationListener,
     private fun maybePublishStationsUpdate() {
         if (stations.isEmpty()) return
 
-        val sortedStations: List<Station> = if (location == null) {
-            ArrayList(stations.values)
-        } else {
-            ArrayList(stations.values).sortedBy { it.getDistanceFrom(location!!) }
-        }
+        val sortedStations: List<Station> =
+                ArrayList(stations.values).sortedBy { it.getDistanceFrom(location) }
         UiBus.get().post(StationsUpdatedEvent(sortedStations, location))
     }
 
