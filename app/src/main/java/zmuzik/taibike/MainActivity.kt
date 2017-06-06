@@ -191,19 +191,19 @@ class MainActivity : AppCompatActivity(),
 
     fun getInfoView(marker: Marker?): View {
         val root = layoutInflater.inflate(R.layout.info_window, null)
-        val stationName: TextView = root.findViewById(R.id.stationName) as TextView
-        val description: TextView = root.findViewById(R.id.description) as TextView
-        val bikesPresent: TextView = root.findViewById(R.id.bikesPresent) as TextView
-        val parkingSpots: TextView = root.findViewById(R.id.parkingSpots) as TextView
-        val distance: TextView = root.findViewById(R.id.distance) as TextView
-        val timeUpdated: TextView = root.findViewById(R.id.timeUpdated) as TextView
+        val stationName = root.findViewById(R.id.stationName) as TextView
+        val description = root.findViewById(R.id.description) as TextView
+        val bikesPresent = root.findViewById(R.id.bikesPresent) as TextView
+        val parkingSpots = root.findViewById(R.id.parkingSpots) as TextView
+        val distance = root.findViewById(R.id.distance) as TextView
+        val timeUpdated = root.findViewById(R.id.timeUpdated) as TextView
         val id: Int = marker?.tag as Int
         val station = stationList.find { it.id == id } ?: return root
         stationName.text = station.nameEn
         description.text = station.descriptionEn
         bikesPresent.text = station.presentBikes.toString()
-        parkingSpots.text = "P " + station.parkingSpots.toString()
-        timeUpdated.text = "Updated " + station.date + " CST"
+        parkingSpots.text = "P ${station.parkingSpots}"
+        timeUpdated.text = "Updated ${station.date} CST"
         distance.text = getFormattedDistance(station.getDistanceFrom(lastLoc))
         return root
     }
