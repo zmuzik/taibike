@@ -1,15 +1,17 @@
-package zmuzik.taibike.utils
+package zmuzik.taibike.common
 
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.util.Log
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 
 
 fun degToRad(deg: Double): Double = deg * Math.PI / 180
+
+fun geoDistance(place1: LatLng, place2: LatLng): Double = geoDistance(place1.latitude, place1.longitude, place2.latitude, place2.longitude)
 
 fun geoDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
     val earthRadiusKm = 6378
@@ -26,16 +28,11 @@ fun geoDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double 
     return earthRadiusKm * c
 }
 
-fun getFormattedDistance(dist: Double): String {
-    if (dist < 0) {
-        return ""
-    } else if (dist < 1) {
-        return "%.0f m".format(dist * 1000)
-    } else if (dist < 10) {
-        return "%.2f km".format(dist)
-    } else {
-        return "%.0f km".format(dist)
-    }
+fun getFormattedDistance(dist: Double): String = when {
+    dist < 0 -> ""
+    dist < 1 -> "%.0f m".format(dist * 1000)
+    dist < 10 -> "%.2f km".format(dist)
+    else -> "%.0f km".format(dist)
 }
 
 fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
@@ -51,12 +48,4 @@ fun getBitmapDescriptor(context: Context, id: Int): BitmapDescriptor {
     val canvas = Canvas(bm)
     vectorDrawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
-}
-
-fun log(message: String) {
-    Log.d("LOG", message)
-}
-
-fun log(clazz: Unit, message: String) {
-    Log.d(clazz.javaClass.simpleName, message)
 }
