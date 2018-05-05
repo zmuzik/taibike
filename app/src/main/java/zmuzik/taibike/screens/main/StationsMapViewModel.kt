@@ -8,9 +8,7 @@ class StationsMapViewModel(val repo: Repo) : ViewModel() {
 
     val location = repo.location
 
-    val showStationEvent = SingleLiveEvent<Int>()
+    val showStationOnMapEvent = repo.showStationOnMapEvent
 
     fun getAllStations() = repo.getAllStations()
-
-    fun showStationOnMap(stationId: Int)  = showStationEvent.postValue(stationId)
 }

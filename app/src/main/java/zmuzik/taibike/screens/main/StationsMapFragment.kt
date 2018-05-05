@@ -26,8 +26,6 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
 
     val viewModel: StationsMapViewModel by inject()
 
-    val mainScreenViewModel: MainScreenViewModel by inject()
-
     var stations = mutableListOf<Station>()
     var markers = mutableListOf<Marker>()
     var currentLocation: LatLng? = null
@@ -38,8 +36,8 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.getAllStations().observe(this, Observer { it?.let { onItemsLoaded(it) } })
+        viewModel.showStationOnMapEvent.observe(this, Observer { it?.let { onShowStationOnMapRequested(it) } })
         viewModel.location.observe(this, Observer { it?.let { onLocationUpdated(it) } })
-        viewModel.showStationEvent.observe(this, Observer { it?.let { onShowStationOnMapRequested(it) } })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -67,7 +65,6 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
             if (stations.isNotEmpty() && activity != null && isAdded) setMarkersToMap(stations)
             mapView?.width
         }
-        viewModel.location.observe(this, android.arch.lifecycle.Observer { it?.let { onLocationUpdated(it) } })
     }
 
     fun onItemsLoaded(list: List<Station>) {
@@ -168,7 +165,6 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
             moveMapTo(station.getLocation(), Conf.INITIAL_FORCE_ZOOM_LEVEL)
             val marker: Marker? = markers.find { it.tag == stationId }
             marker?.showInfoWindow()
-            mainScreenViewModel.switchToMap()
         }
     }
 

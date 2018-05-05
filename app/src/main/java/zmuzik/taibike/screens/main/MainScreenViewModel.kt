@@ -8,7 +8,5 @@ class MainScreenViewModel(repo: Repo) : ViewModel() {
 
     val location = repo.location
 
-    val switchToMapEvent = SingleLiveEvent<Boolean>()
-
-    fun switchToMap() = switchToMapEvent.postValue(true)
+    val showMapEvent = repo.showMapEvent
 }

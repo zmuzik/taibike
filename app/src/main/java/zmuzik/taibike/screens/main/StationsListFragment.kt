@@ -24,8 +24,6 @@ class StationsListFragment : Fragment() {
 
     val viewModel: StationsListViewModel by inject()
 
-    val mapViewModel: StationsMapViewModel by inject()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_station_list, container, false)
 
@@ -86,7 +84,7 @@ class StationsListFragment : Fragment() {
                 itemView.timeUpdated.visibility = View.GONE
                 itemView.map.visibility = View.GONE
 
-                itemView.map.setOnClickListener { mapViewModel.showStationOnMap(station.id) }
+                itemView.map.setOnClickListener { viewModel.showStationOnMap(station.id) }
             }
         }
     }

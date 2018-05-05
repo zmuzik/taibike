@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         navigation.setOnNavigationItemSelectedListener(this)
 
         locationLd = LocationLd(this).also { it.observe(this, Observer { it?.let { viewModel.location.postValue(it) } }) }
-        viewModel.switchToMapEvent.observe(this, Observer { it?.let { viewPager.currentItem = 0 } })
+        viewModel.showMapEvent.observe(this, Observer { it?.let { viewPager.currentItem = 0 } })
     }
 
     override fun onStart() {
