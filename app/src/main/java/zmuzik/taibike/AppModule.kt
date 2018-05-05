@@ -7,8 +7,6 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
 import zmuzik.taibike.repo.Repo
 import zmuzik.taibike.screens.main.MainScreenViewModel
-import zmuzik.taibike.screens.main.StationsListViewModel
-import zmuzik.taibike.screens.main.StationsMapViewModel
 
 val appModule: Module = applicationContext {
 
@@ -25,6 +23,4 @@ val appModule: Module = applicationContext {
     bean { Repo(get()) }
 
     viewModel { MainScreenViewModel(get()) }
-    viewModel { StationsListViewModel(get()) }
-    viewModel { StationsMapViewModel(get()) }
 }

@@ -10,15 +10,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import zmuzik.taibike.Conf
-import zmuzik.taibike.common.SingleLiveEvent
 import zmuzik.taibike.repo.entity.Station
 import java.io.InputStreamReader
 
 class Repo(val okHttpClient: OkHttpClient) {
 
     val location = MutableLiveData<LatLng>()
-    val showMapEvent = SingleLiveEvent<Boolean>()
-    val showStationOnMapEvent = SingleLiveEvent<Int>()
 
     private val stations = MutableLiveData<List<Station>>()
     private var stationsLastUpdate = -1L
@@ -34,11 +31,6 @@ class Repo(val okHttpClient: OkHttpClient) {
             }
         }
         return stations
-    }
-
-    fun showStationOnMap(id: Int) {
-        showMapEvent.postValue(true)
-        showStationOnMapEvent.postValue(id)
     }
 
     private fun getCall(url: String) = okHttpClient.newCall(Request.Builder().url(url).build())

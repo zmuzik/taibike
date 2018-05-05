@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.fragment_map.*
-import org.koin.android.ext.android.inject
+import org.koin.android.architecture.ext.sharedViewModel
 import zmuzik.taibike.Conf
 import zmuzik.taibike.R
 import zmuzik.taibike.common.geoDistance
@@ -24,7 +24,7 @@ import zmuzik.taibike.repo.entity.Station
 
 class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
 
-    val viewModel: StationsMapViewModel by inject()
+    val viewModel: MainScreenViewModel by sharedViewModel()
 
     var stations = mutableListOf<Station>()
     var markers = mutableListOf<Marker>()

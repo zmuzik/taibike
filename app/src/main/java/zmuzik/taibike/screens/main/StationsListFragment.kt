@@ -13,7 +13,7 @@ import android.widget.LinearLayout
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_station_list.*
 import kotlinx.android.synthetic.main.item_station_list.view.*
-import org.koin.android.ext.android.inject
+import org.koin.android.architecture.ext.sharedViewModel
 import zmuzik.taibike.R
 import zmuzik.taibike.common.geoDistance
 import zmuzik.taibike.common.getFormattedDistance
@@ -22,7 +22,7 @@ import zmuzik.taibike.repo.entity.Station
 
 class StationsListFragment : Fragment() {
 
-    val viewModel: StationsListViewModel by inject()
+    val viewModel: MainScreenViewModel by sharedViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_station_list, container, false)

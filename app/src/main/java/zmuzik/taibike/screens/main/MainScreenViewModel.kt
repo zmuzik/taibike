@@ -4,9 +4,18 @@ import android.arch.lifecycle.ViewModel
 import zmuzik.taibike.common.SingleLiveEvent
 import zmuzik.taibike.repo.Repo
 
-class MainScreenViewModel(repo: Repo) : ViewModel() {
+class MainScreenViewModel(val repo: Repo) : ViewModel() {
 
     val location = repo.location
 
-    val showMapEvent = repo.showMapEvent
+    val showMapEvent = SingleLiveEvent<Boolean>()
+
+    val showStationOnMapEvent = SingleLiveEvent<Int>()
+
+    fun getAllStations() = repo.getAllStations()
+
+    fun showStationOnMap(id: Int) {
+        showMapEvent.postValue(true)
+        showStationOnMapEvent.postValue(id)
+    }
 }
