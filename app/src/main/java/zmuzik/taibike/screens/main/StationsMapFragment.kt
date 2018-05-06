@@ -47,7 +47,7 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
             googleMap?.setMaxZoomPreference(Conf.PREF_MAX_ZOOM_LEVEL)
             googleMap?.setInfoWindowAdapter(this)
             googleMap?.uiSettings?.isZoomControlsEnabled = true
-            viewModel.location.value?.let {
+            viewModel.locationLd.value?.let {
                 val cameraPosition = CameraPosition.builder().target(it).zoom(13f).build()
                 googleMap.let { googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition)) }
             }
@@ -58,9 +58,9 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
             mapView?.width
         }
         progressBar.setColor(R.color.primary_dark)
-        viewModel.getAllStations().observe(this, Observer { it?.let { onStationsUpdated(it) } })
         viewModel.showStationOnMapEvent.observe(this, Observer { it?.let { onShowStationOnMapRequested(it) } })
-        viewModel.location.observe(this, Observer { it?.let { onLocationUpdated(it) } })
+        viewModel.locationLd.observe(this, Observer { it?.let { onLocationUpdated(it) } })
+        viewModel.stationsLd.observe(this, Observer { it?.let { onStationsUpdated(it) } })
     }
 
     fun onStationsUpdated(apiResource: ApiResource<List<Station>>) = when (apiResource) {

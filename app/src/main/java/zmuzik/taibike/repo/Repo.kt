@@ -1,6 +1,5 @@
 package zmuzik.taibike.repo
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.util.JsonReader
 import com.google.android.gms.maps.model.LatLng
@@ -15,30 +14,25 @@ import java.io.InputStreamReader
 
 class Repo(val okHttpClient: OkHttpClient) {
 
-    val location = MutableLiveData<LatLng>()
+    val locationLd = MutableLiveData<LatLng>()
 
-    var cachedApiResource = MutableLiveData<ApiResource<List<Station>>>()
-    var cachedApiResourceStamp = -1L
+    val stationsLd = MutableLiveData<ApiResource<List<Station>>>()
+    var stationsUpdated = -1L
 
-    fun getAllStations(forceCallApi: Boolean = false): LiveData<ApiResource<List<Station>>> {
+    fun refreshStations(forceApiCall: Boolean = false) {
         val now = System.currentTimeMillis()
-        return if (forceCallApi || cachedApiResourceStamp + Conf.STATIONS_MAX_UPDATE_INTERVAL < now) {
-            val result = MutableLiveData<ApiResource<List<Station>>>()
-            cachedApiResource = result
-            cachedApiResourceStamp = now
-            result.value = ApiResource.Loading()
+        if (forceApiCall || stationsUpdated + Conf.STATIONS_MAX_UPDATE_INTERVAL < now) {
+            stationsUpdated = now
+            stationsLd.value = ApiResource.Loading()
             async(CommonPool) {
                 try {
                     val tpStations = processApiResponseTaipei(getCall(Conf.API_ROOT_TAIPEI).execute())
                     val ntpStations = processApiResponseNewTaipei(getCall(Conf.API_ROOT_NEW_TAIPEI).execute())
-                    result.postValue(ApiResource.Success(tpStations.union(ntpStations).toList()))
+                    stationsLd.postValue(ApiResource.Success(tpStations.union(ntpStations).toList()))
                 } catch (e: Exception) {
-                    result.postValue(ApiResource.Failure(e))
+                    stationsLd.postValue(ApiResource.Failure(e))
                 }
             }
-            result
-        } else {
-            cachedApiResource
         }
     }
 

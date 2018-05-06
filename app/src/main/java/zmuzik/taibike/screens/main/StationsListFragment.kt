@@ -3,6 +3,7 @@ package zmuzik.taibike.screens.main
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -20,7 +21,7 @@ import zmuzik.taibike.repo.ApiResource
 import zmuzik.taibike.repo.entity.Station
 
 
-class StationsListFragment : Fragment() {
+class StationsListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     val viewModel: MainScreenViewModel by sharedViewModel()
 
@@ -32,11 +33,17 @@ class StationsListFragment : Fragment() {
         with(recyclerView) {
             layoutManager = LinearLayoutManager(view.context)
             addItemDecoration(DividerItemDecoration(recyclerView.context, LinearLayout.VERTICAL))
-            adapter = StationsListAdapter().also { it.location = viewModel.location.value }
+            adapter = StationsListAdapter().also { it.location = viewModel.locationLd.value }
         }
         progressBar.setColor(R.color.primary_dark)
-        viewModel.getAllStations().observe(this, Observer { it?.let { (recyclerView.adapter as StationsListAdapter).onStationsUpdated(it) } })
-        viewModel.location.observe(this, Observer { it?.let { (recyclerView.adapter as StationsListAdapter).updateLocation(it) } })
+        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout.setColorSchemeResources(R.color.primary_dark, R.color.primary)
+        viewModel.locationLd.observe(this, Observer { it?.let { (recyclerView.adapter as StationsListAdapter).updateLocation(it) } })
+        viewModel.stationsLd.observe(this, Observer { it?.let { (recyclerView.adapter as StationsListAdapter).onStationsUpdated(it) } })
+    }
+
+    override fun onRefresh() {
+        viewModel.refreshStations(true)
     }
 
     inner class StationsListAdapter : RecyclerView.Adapter<StationsListAdapter.ViewHolder>() {
@@ -56,6 +63,7 @@ class StationsListFragment : Fragment() {
             }
             is ApiResource.Success -> {
                 progressBar.hide()
+                swipeRefreshLayout.isRefreshing = false
                 stations.clear()
                 apiResource.data?.let { stations.addAll(it) }
                 location?.let { loc -> stations.sortBy { geoDistance(loc.latitude, loc.longitude, it.lat, it.lng) } }
@@ -63,6 +71,7 @@ class StationsListFragment : Fragment() {
             }
             is ApiResource.Failure -> {
                 progressBar.hide()
+                swipeRefreshLayout.isRefreshing = false
                 activity?.toast(R.string.error_loading_data)
             }
         }

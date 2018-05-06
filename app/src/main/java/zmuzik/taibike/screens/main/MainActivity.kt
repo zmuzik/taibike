@@ -42,13 +42,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         })
         navigation.setOnNavigationItemSelectedListener(this)
 
-        locationLd = LocationLd(this).also { it.observe(this, Observer { it?.let { viewModel.location.postValue(it) } }) }
+        locationLd = LocationLd(this).also { it.observe(this, Observer { it?.let { viewModel.locationLd.postValue(it) } }) }
         viewModel.showMapEvent.observe(this, Observer { it?.let { viewPager.currentItem = 0 } })
     }
 
     override fun onStart() {
         super.onStart()
         if (!isLocationPermissionGranted()) requestLocationPermission()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshStations()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
