@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_item_margin">
@@ -13,7 +14,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="8dp"
-        android:textColor="@color/blue" />
+        android:textColor="@color/blue"
+        tools:text="P 37" />
 
     <TextView
         android:id="@+id/bikesPresent"
@@ -22,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_toLeftOf="@id/parkingSpots"
-        android:textColor="@color/green" />
+        android:textColor="@color/green"
+        tools:text="P 15" />
 
     <ImageView
         android:id="@+id/bikePic"
@@ -40,8 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/bikePic" />
-
+        android:layout_toLeftOf="@id/bikePic"
+        tools:text="Fisherman's Wharf" />
 
     <TextView
         android:id="@+id/distance"
@@ -49,7 +52,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/parkingSpots" />
+        android:layout_below="@id/parkingSpots"
+        tools:text="5 km" />
 
     <ImageView
         android:id="@+id/map"
@@ -67,7 +71,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/distance"
         android:layout_toLeftOf="@id/map"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:text="No. 199, Guanhai Rd., Tamsui Dist." />
 
     <TextView
         android:id="@+id/timeUpdated"
@@ -77,5 +82,6 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/description"
         android:layout_toLeftOf="@id/map"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:text="Updated: 12:00:00 CST" />
 </RelativeLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_item_margin"
@@ -13,7 +14,8 @@
         style="@style/primaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="@dimen/info_window_max_width" />
+        android:maxWidth="@dimen/info_window_max_width"
+        tools:text="Fisherman's Wharf" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -33,7 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:textColor="@color/green" />
+            android:textColor="@color/green"
+            tools:text="37" />
 
         <TextView
             android:id="@+id/parkingSpots"
@@ -41,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:textColor="@color/blue" />
+            android:textColor="@color/blue"
+            tools:text="P 15" />
 
     </LinearLayout>
 
@@ -49,19 +53,22 @@
         android:id="@+id/distance"
         style="@style/secondaryText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:text="5 km" />
 
     <TextView
         android:id="@+id/description"
         style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="@dimen/info_window_max_width" />
+        android:maxWidth="@dimen/info_window_max_width"
+        tools:text="No. 199, Guanhai Rd., Tamsui Dist." />
 
     <TextView
         android:id="@+id/timeUpdated"
         style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"
+        tools:text="Updated: 12:00:00 CST" />
 </LinearLayout>
