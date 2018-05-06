@@ -16,9 +16,8 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import org.koin.android.architecture.ext.sharedViewModel
 import zmuzik.taibike.Conf
 import zmuzik.taibike.R
-import zmuzik.taibike.common.geoDistance
-import zmuzik.taibike.common.getFormattedDistance
-import zmuzik.taibike.common.isLocationPermissionGranted
+import zmuzik.taibike.common.*
+import zmuzik.taibike.repo.ApiResource
 import zmuzik.taibike.repo.entity.Station
 
 
@@ -32,13 +31,6 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
 
     var googleMap: GoogleMap? = null
     var isZoomedInPosition: Boolean = false
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.getAllStations().observe(this, Observer { it?.let { onItemsLoaded(it) } })
-        viewModel.showStationOnMapEvent.observe(this, Observer { it?.let { onShowStationOnMapRequested(it) } })
-        viewModel.location.observe(this, Observer { it?.let { onLocationUpdated(it) } })
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_map, container, false)
@@ -65,12 +57,26 @@ class StationsMapFragment : Fragment(), GoogleMap.InfoWindowAdapter {
             if (stations.isNotEmpty() && activity != null && isAdded) setMarkersToMap(stations)
             mapView?.width
         }
+        progressBar.setColor(R.color.primary_dark)
+        viewModel.getAllStations().observe(this, Observer { it?.let { onStationsUpdated(it) } })
+        viewModel.showStationOnMapEvent.observe(this, Observer { it?.let { onShowStationOnMapRequested(it) } })
+        viewModel.location.observe(this, Observer { it?.let { onLocationUpdated(it) } })
     }
 
-    fun onItemsLoaded(list: List<Station>) {
-        stations.clear()
-        stations.addAll(list)
-        updateListAndMap()
+    fun onStationsUpdated(apiResource: ApiResource<List<Station>>) = when (apiResource) {
+        is ApiResource.Loading -> {
+            progressBar.show()
+        }
+        is ApiResource.Success -> {
+            progressBar.hide()
+            stations.clear()
+            apiResource.data?.let { stations.addAll(it) }
+            updateListAndMap()
+        }
+        is ApiResource.Failure -> {
+            progressBar.hide()
+            activity?.toast(R.string.error_loading_data)
+        }
     }
 
     fun onLocationUpdated(newLocation: LatLng) {

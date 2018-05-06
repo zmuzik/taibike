@@ -17,20 +17,29 @@ class Repo(val okHttpClient: OkHttpClient) {
 
     val location = MutableLiveData<LatLng>()
 
-    private val stations = MutableLiveData<List<Station>>()
-    private var stationsLastUpdate = -1L
+    var cachedApiResource = MutableLiveData<ApiResource<List<Station>>>()
+    var cachedApiResourceStamp = -1L
 
-    fun getAllStations(): LiveData<List<Station>> {
+    fun getAllStations(forceCallApi: Boolean = false): LiveData<ApiResource<List<Station>>> {
         val now = System.currentTimeMillis()
-        if (stationsLastUpdate + Conf.STATIONS_MAX_UPDATE_INTERVAL < now) {
-            stationsLastUpdate = now
+        return if (forceCallApi || cachedApiResourceStamp + Conf.STATIONS_MAX_UPDATE_INTERVAL < now) {
+            val result = MutableLiveData<ApiResource<List<Station>>>()
+            cachedApiResource = result
+            cachedApiResourceStamp = now
+            result.value = ApiResource.Loading()
             async(CommonPool) {
-                val tpStations = processApiResponseTaipei(getCall(Conf.API_ROOT_TAIPEI).execute())
-                val ntpStations = processApiResponseNewTaipei(getCall(Conf.API_ROOT_NEW_TAIPEI).execute())
-                stations.postValue(tpStations.union(ntpStations).toList())
+                try {
+                    val tpStations = processApiResponseTaipei(getCall(Conf.API_ROOT_TAIPEI).execute())
+                    val ntpStations = processApiResponseNewTaipei(getCall(Conf.API_ROOT_NEW_TAIPEI).execute())
+                    result.postValue(ApiResource.Success(tpStations.union(ntpStations).toList()))
+                } catch (e: Exception) {
+                    result.postValue(ApiResource.Failure(e))
+                }
             }
+            result
+        } else {
+            cachedApiResource
         }
-        return stations
     }
 
     private fun getCall(url: String) = okHttpClient.newCall(Request.Builder().url(url).build())
