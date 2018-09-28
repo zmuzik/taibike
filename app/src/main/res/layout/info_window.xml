@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_item_margin"
     android:background="@drawable/info_window_bg"
-    android:maxWidth="@dimen/info_window_max_width"
-    android:orientation="vertical">
+    android:maxWidth="@dimen/info_window_max_width">
 
     <TextView
         android:id="@+id/stationName"
@@ -15,45 +14,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="@dimen/info_window_max_width"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Fisherman's Wharf" />
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/bikePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stationName"
+        app:srcCompat="@drawable/ic_bike"
+        android:contentDescription="@string/bike" />
 
-        <ImageView
-            android:id="@+id/bikePic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            app:srcCompat="@drawable/ic_bike" />
+    <TextView
+        android:id="@+id/bikesPresent"
+        style="@style/primaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:textColor="@color/green"
+        app:layout_constraintStart_toEndOf="@id/bikePic"
+        app:layout_constraintTop_toTopOf="@id/bikePic"
+        tools:text="37" />
 
-        <TextView
-            android:id="@+id/bikesPresent"
-            style="@style/primaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:textColor="@color/green"
-            tools:text="37" />
-
-        <TextView
-            android:id="@+id/parkingSpots"
-            style="@style/primaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:textColor="@color/blue"
-            tools:text="P 15" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/parkingSpots"
+        style="@style/primaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/blue"
+        app:layout_constraintStart_toEndOf="@id/bikesPresent"
+        app:layout_constraintTop_toTopOf="@id/bikePic"
+        tools:text="P 15" />
 
     <TextView
         android:id="@+id/distance"
         style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bikePic"
         tools:text="5 km" />
 
     <TextView
@@ -62,6 +65,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="@dimen/info_window_max_width"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/distance"
         tools:text="No. 199, Guanhai Rd., Tamsui Dist." />
 
     <TextView
@@ -70,5 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description"
         tools:text="Updated: 12:00:00 CST" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

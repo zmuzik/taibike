@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_item_margin">
 
@@ -11,10 +11,9 @@
         style="@style/primaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="8dp"
         android:textColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="P 37" />
 
     <TextView
@@ -22,28 +21,31 @@
         style="@style/primaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_toLeftOf="@id/parkingSpots"
+        android:layout_marginEnd="8dp"
         android:textColor="@color/green"
-        tools:text="P 15" />
+        app:layout_constraintEnd_toStartOf="@id/parkingSpots"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="15" />
 
     <ImageView
         android:id="@+id/bikePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="3dp"
-        android:layout_toLeftOf="@id/bikesPresent"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@id/bikesPresent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_bike" />
 
     <TextView
         android:id="@+id/stationName"
         style="@style/primaryText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/bikePic"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/bikePic"
         tools:text="Fisherman's Wharf" />
 
     <TextView
@@ -51,27 +53,28 @@
         style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/parkingSpots"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/parkingSpots"
         tools:text="5 km" />
 
     <ImageView
         android:id="@+id/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/distance"
-        app:srcCompat="@drawable/ic_map_orange_24dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/distance"
+        app:srcCompat="@drawable/ic_map_orange_24dp"
+        android:contentDescription="@string/map" />
 
     <TextView
         android:id="@+id/description"
         style="@style/secondaryText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/distance"
-        android:layout_toLeftOf="@id/map"
-        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/map"
         tools:text="No. 199, Guanhai Rd., Tamsui Dist." />
 
     <TextView
@@ -79,9 +82,9 @@
         style="@style/secondaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/description"
-        android:layout_toLeftOf="@id/map"
-        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description"
         tools:text="Updated: 12:00:00 CST" />
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
