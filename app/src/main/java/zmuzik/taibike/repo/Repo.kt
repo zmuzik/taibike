@@ -1,7 +1,7 @@
 package zmuzik.taibike.repo
 
-import android.arch.lifecycle.MutableLiveData
 import android.util.JsonReader
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async

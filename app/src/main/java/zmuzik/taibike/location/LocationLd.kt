@@ -2,9 +2,9 @@ package zmuzik.taibike.location
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.arch.lifecycle.LiveData
 import android.location.Location
 import android.os.Looper
+import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import zmuzik.taibike.common.isLocationPermissionGranted

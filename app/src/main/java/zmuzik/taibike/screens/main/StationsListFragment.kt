@@ -1,20 +1,20 @@
 package zmuzik.taibike.screens.main
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_station_list.*
 import kotlinx.android.synthetic.main.item_station_list.view.*
-import org.koin.android.architecture.ext.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import zmuzik.taibike.R
 import zmuzik.taibike.common.*
 import zmuzik.taibike.repo.ApiResource

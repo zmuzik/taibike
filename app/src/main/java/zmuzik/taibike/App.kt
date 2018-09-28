@@ -1,7 +1,7 @@
 package zmuzik.taibike
 
 import android.app.Application
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate
 import com.squareup.leakcanary.LeakCanary
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber

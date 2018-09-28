@@ -1,20 +1,20 @@
 package zmuzik.taibike.screens.main
 
-import android.arch.lifecycle.Observer
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import zmuzik.taibike.location.LocationLd
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.Observer
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.architecture.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import zmuzik.taibike.R
 import zmuzik.taibike.common.isLocationPermissionGranted
+import zmuzik.taibike.location.LocationLd
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 

@@ -1,19 +1,19 @@
 package zmuzik.taibike.screens.main
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.fragment_map.*
-import org.koin.android.architecture.ext.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import zmuzik.taibike.Conf
 import zmuzik.taibike.R
 import zmuzik.taibike.common.*

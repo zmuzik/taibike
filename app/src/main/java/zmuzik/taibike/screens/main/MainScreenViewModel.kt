@@ -1,6 +1,6 @@
 package zmuzik.taibike.screens.main
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import zmuzik.taibike.common.SingleLiveEvent
 import zmuzik.taibike.repo.Repo
 
