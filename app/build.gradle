@@ -82,7 +82,6 @@ androidExtensions {
 }
 
 ext {
-    playServicesVersion = "15.0.1"
     leakcanaryVersion = "1.6.1"
     okHttpVersion = "3.9.1"
 }
@@ -98,8 +97,8 @@ dependencies {
 
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 
-    implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
-    implementation "com.google.android.gms:play-services-location:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-maps:15.0.1"
+    implementation "com.google.android.gms:play-services-location:15.0.1"
 
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
