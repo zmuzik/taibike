@@ -35,7 +35,8 @@
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toStartOf="@id/bikesPresent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_bike" />
+        app:srcCompat="@drawable/ic_bike"
+        android:contentDescription="@string/bike" />
 
     <TextView
         android:id="@+id/stationName"
