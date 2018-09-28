@@ -45,6 +45,9 @@ class LocationLd(private val activity: Activity) : LiveData<LatLng>() {
         if (client == null) client = LocationServices.getFusedLocationProviderClient(activity)
         weakLocationCallbackWr = WeakReference(WeakLocationCallback(locationCallback))
         client?.requestLocationUpdates(locationRequest, weakLocationCallbackWr?.get(), Looper.myLooper())
+        client?.lastLocation?.addOnSuccessListener { location: Location? ->
+            location?.let { publishNewLocation(it) }
+        }
     }
 
     fun stopLocationUpdates() = weakLocationCallbackWr?.get()?.let { client?.removeLocationUpdates(it) }
