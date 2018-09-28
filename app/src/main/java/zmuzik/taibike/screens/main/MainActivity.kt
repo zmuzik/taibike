@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.battswap.location.LocationLd
+import zmuzik.taibike.location.LocationLd
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.architecture.ext.viewModel
 import zmuzik.taibike.R

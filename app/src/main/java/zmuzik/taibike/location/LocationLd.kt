@@ -1,4 +1,4 @@
-package com.battswap.location
+package zmuzik.taibike.location
 
 import android.annotation.SuppressLint
 import android.app.Activity
