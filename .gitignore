@@ -59,11 +59,7 @@ captures/
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
-.idea/vcs.xml
-.idea/kotlinc.xml
-.idea/misc.xml
-.idea/caches/
-.idea/codeStyles/
+.idea
 
 gradle.properties
 
